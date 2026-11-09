@@ -10,6 +10,9 @@ This is the single shared template. Both languages express the same rules and fi
 
 > 通用基线。项目采用时填写角色、命令、检查与合并策略。本文不授予外部操作权限。
 
+#### 环境与已有授权
+可配置环境默认：云电脑优先。用户为任务指定环境时遵从该选择；任务依赖本地文件、应用或已登录会话时选择能合法访问这些资源的合适环境。操作前先核实当前环境及目标，优先使用已连接且支持所需操作的 API/连接器，并以只读检查确认已有仓库授权与具体能力；不要仅因某个 CLI 未登录就重复要求授权。工具能力不足与访问被拒绝分别报告；不得为绕过拒绝或安全限制而更换环境、账户或访问路径。
+
 #### 职责分离
 需求与架构评审、实现与调试、独立代码评审分开执行。独立评审方式由项目明确配置，不把实现者自查或 CI 通过当作独立评审。
 
@@ -30,7 +33,9 @@ This is the single shared template. Both languages express the same rules and fi
 至少包括权限/安全边界、仓库保护/required checks、凭据、对外发布/部署、数据删除或不可逆迁移、依赖主版本升级及跨多个子系统的大重构。项目可细化阈值；不确定时先确认。批准记录写范围及条件，不保存敏感数据。
 
 #### 署名
-AI 实际编写的改动使用可识别的 AI 作者名称及 `Agent: <agent-id>`；人工使用本人选择姓名和邮箱以及 `Agent: human`。AI 来源不以 noreply 判断；人工批准或点击合并不改变 AI 实作来源。不得自动修改账号隐私设置。不要在文档/PR 正文复制真实邮箱。
+先用只读检查核实目标仓库已有授权和当前工具能力；命令行未登录不等于连接器无权访问，不应因此要求重复授权。Git author/committer 元数据须如实保留和披露，不伪装身份；工具支持且项目允许时使用可识别的 AI 作者名称。若工具不能指定 AI author，且项目规则允许，可保留工具实际设置的连接账户身份，在提交信息明确写明 AI authored 并加 `Agent: <实际来源标识>`，在 PR 披露 AI 来源、实际 author/committer 及工具限制，不宣称作者字段已经设为 AI。若项目强制 AI 作者名称、DCO 或特定签名且当前路径无法满足，停止相关提交/发布并请示，不绕过、不擅自改规则或创建凭据。
+
+人工提交使用本人选择姓名、邮箱及 `Agent: human`；人工批准不改变 AI 实作来源。不以邮箱域名判定 AI，不强制人工 noreply，不擅自修改全局身份或账号隐私设置，不在文档/PR 正文复制真实邮箱。
 
 服务端 squash/rebase/merge 可能重写元数据，必须在合并前核实。若项目批准采用保留原提交的 fast-forward：确认 base 是 head 祖先、全部待合入提交通过署名检查、远端值仍未变化，只用普通非强推更新精确已核验 head；保护拒绝即停止。不把此方案设为所有项目通用默认。
 
@@ -54,6 +59,9 @@ AI 实际编写的改动使用可识别的 AI 作者名称及 `Agent: <agent-id>
 
 > Generic baseline. Fill in roles, commands, checks, and merge strategy when adopting it for a project. This document does not authorize external actions.
 
+#### Environment and existing access
+Configurable environment default: prefer the cloud computer. Follow the user’s task-specific environment choice; when work depends on local files, apps or signed-in sessions, select a suitable environment with authorized access to those resources. Verify the current environment and target before acting. Prefer an existing connected API/connector that supports the operation, and use read-only checks to establish existing repository access and concrete capabilities; do not request duplicate authorization merely because a CLI is not logged in. Distinguish unsupported capabilities from denied access; never switch environments, accounts or access paths to evade a denial or security restriction.
+
 #### Separation of responsibilities
 Perform requirements and architecture review, implementation and debugging, and independent code review separately. The project must explicitly configure its independent review mechanism. An implementer's self-review or passing CI does not constitute independent review.
 
@@ -74,7 +82,9 @@ Map acceptance items to test files, case names, inputs, and expected results, di
 These include, at minimum, permission/security boundaries, repository protections/required checks, credentials, external releases/deployments, data deletion or irreversible migrations, major dependency upgrades, and large refactors across multiple subsystems. Projects may refine thresholds; ask first when uncertain. Approval records must state scope and conditions without storing sensitive data.
 
 #### Attribution
-Changes actually written by AI use an identifiable AI author name and `Agent: <agent-id>`; humans use their chosen name and email address and `Agent: human`. A noreply address does not determine AI origin; human approval or clicking merge does not change the origin of AI implementation. Do not automatically change account privacy settings. Do not copy real email addresses into document/PR body text.
+First use read-only checks to verify existing access to the target repository and the capabilities of the current tools. A CLI without a login does not mean the connector lacks access; do not request duplicate authorization on that basis. Preserve and disclose Git author/committer metadata truthfully, without impersonation; use an identifiable AI author name when the tool supports it and project rules allow it. If the tool cannot set an AI author and project rules permit the fallback, retain the connected-account identity actually set by the tool, explicitly state AI authored in the commit message, add `Agent: <actual-source-identifier>`, and disclose AI origin, the actual author/committer and the tool limitation in the PR. Do not claim that the author field is an AI identity. If mandatory AI-author, DCO or signing rules cannot be met through the current path, stop the affected commit/publication and ask for direction; do not bypass requirements, change rules or create credentials on your own.
+
+Human commits use the person’s chosen name, email and `Agent: human`; human approval does not change AI implementation origin. Do not infer AI origin from email domains, require humans to use noreply, change global identity or account privacy settings without authorization, or copy real email addresses into document/PR body text.
 
 Server-side squash/rebase/merge may rewrite metadata; verify this before merging. If the project approves fast-forward merging to preserve original commits: confirm that base is an ancestor of head, all incoming commits pass attribution checks, and remote values remain unchanged. Use only a normal, non-force push to update to the exact verified head; stop if protections reject it. Do not make this the universal default for all projects.
 

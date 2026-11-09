@@ -29,6 +29,8 @@ dot should first:
 
 The minimum parameters are “where” and “what.” The environment can be detected; test commands come from the project. Without a specified merge strategy, do not merge. Without a specified external review service, do not call one. If independent review is unavailable, preparation and self-review may continue, but independent review must be marked blocked; do not claim readiness to merge.
 
+Configurable environment default: prefer the cloud computer. Follow the user’s task-specific environment choice; when work depends on local files, apps or signed-in sessions, select a suitable environment with authorized access to those resources. Verify the current environment and target before acting. Prefer an existing connected API/connector that supports the operation, and use read-only checks to establish existing repository access and concrete capabilities; do not request duplicate authorization merely because a CLI is not logged in. Distinguish unsupported capabilities from denied access; never switch environments, accounts or access paths to evade a denial or security restriction.
+
 ## 3. Adopt into an existing project (optional, not a prerequisite)
 
 Copy only the templates you need and reconcile them with existing files item by item, without overwriting project rules:
@@ -140,7 +142,9 @@ When checking, record:
 
 ## 7. Attribution, signatures, and provenance
 
-Check project identity, DCO, and signing rules first. Do not change global Git identity without authorization; confirm conflicts before proceeding. Commit authorship must accurately reflect actual origin: AI implementations use an identifiable AI author name and Agent: <actual-source-identifier>; humans use their chosen identity and Agent: human. Human approval does not turn AI implementation into human implementation. Do not infer origin from email domains or copy real email addresses into document/PR body text.
+First use read-only checks to verify existing access to the target repository and the capabilities of the current tools. A CLI without a login does not mean the connector lacks access; do not request duplicate authorization on that basis. Preserve and disclose Git author/committer metadata truthfully, without impersonation; use an identifiable AI author name when the tool supports it and project rules allow it. If the tool cannot set an AI author and project rules permit the fallback, retain the connected-account identity actually set by the tool, explicitly state AI authored in the commit message, add `Agent: <actual-source-identifier>`, and disclose AI origin, the actual author/committer and the tool limitation in the PR. Do not claim that the author field is an AI identity. If mandatory AI-author, DCO or signing rules cannot be met through the current path, stop the affected commit/publication and ask for direction; do not bypass requirements, change rules or create credentials on your own.
+
+Human commits use the person’s chosen identity and `Agent: human`; human approval does not turn AI implementation into human implementation. Do not infer origin from email domains, require humans to use noreply, change global identity or account privacy settings without authorization, or copy real email addresses into document or PR body text.
 
 Authors/trailers are provenance declarations, not cryptographic signatures. The project decides whether GPG/SSH/Sigstore or other signatures are required. If authorized signing capability is unavailable, report a blocker; do not generate/export keys or disable signing requirements. Server-side squash/rebase/merge may alter metadata. Verify the strategy before merging, then reread actual attribution and signature-verification results afterward.
 

@@ -1,6 +1,8 @@
 # Changelog
 
 ## 0.2.0 — Unreleased
+- Adds a configurable cloud-first default, with boundaries for user-selected environments, local-resource dependencies and access restrictions.
+- Clarifies verification of existing access, conditional truthful AI attribution with limited tools, and stopping for mandatory attribution-rule conflicts.
 - Provides complete Simplified Chinese and English reading documents; the six shared templates remain one set of bilingual files with identical rules, safety boundaries, and code semantics.
 - README explains workflow design principles, the complete process, acceptance criteria, and authorization boundaries.
 - Added template/COOKBOOK.md, a standalone, shareable Cookbook that can be handed directly to dot.

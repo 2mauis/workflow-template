@@ -4,6 +4,8 @@ Language / 语言: [简体中文](README.md) · **English**
 
 These templates help people and dot turn requirements into changes that can be checked, reviewed, and handed off. **There is only one set of functional and operational templates; Chinese and English are two ways to read the documentation.** The package contains no automatic installer, CI scripts, or deployment functionality, and prescribes no toolchain for a particular language, product, or platform.
 
+Configurable environment default: prefer the cloud computer. Follow the user’s task-specific environment choice; when work depends on local files, apps or signed-in sessions, select a suitable environment with authorized access to those resources. Verify the current environment and target before acting. Prefer an existing connected API/connector that supports the operation, and use read-only checks to establish existing repository access and concrete capabilities; do not request duplicate authorization merely because a CLI is not logged in. Distinguish unsupported capabilities from denied access; never switch environments, accounts or access paths to evade a denial or security restriction.
+
 ## Where to start
 
 Hand the [Chinese Cookbook](template/COOKBOOK.md) or [English Cookbook](template/COOKBOOK.en.md) to dot on its own, filling in the target repository and task. Without a project, start with the local four-case red/green exercise.
@@ -38,6 +40,8 @@ Repository access does not authorize permission changes; finished code does not 
 ### Traceable provenance without leaking private information
 
 Commit provenance reflects actual contributions; do not describe human approval as human implementation. Authors/trailers are not cryptographic signatures. Shareable templates contain only generic rules, without private coordination, accounts, addresses, credentials, raw logs, or private history. Supplement scanning with human review.
+
+Verify existing repository access and tool capabilities before diagnosing connection problems. When a tool cannot set an AI author, retain actual connected-account metadata only where project rules allow the fallback, and identify origin through AI authored, an Agent trailer and accurate PR disclosure. Stop and ask if mandatory attribution rules cannot be met. See the Cookbook attribution section.
 
 ## How a task runs from start to finish
 
