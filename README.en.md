@@ -1,80 +1,165 @@
-# Workflow v2 templates
+# Workflow v2 — templates for AI-assisted development
 
-Language / 语言: [简体中文](README.md) · **English**
+Language: **English** · [简体中文](README.md)
 
-Development collaboration templates for people and AI: start with requirements and design review, then implement, validate and independently review changes to produce results that can be accepted, traced and handed off. **The core is clear responsibilities, evidence for progress, and stopping when an owner’s decision is needed.**
+Workflow v2 is a set of plain-Markdown rules and templates for projects where people and AI agents work on the same codebase. It takes a change from request to a reviewed, tested and traceable result, and it states which steps an AI agent may carry out, which checks are automated, and which decisions belong to a person.
 
-To start directly, hand the [Cookbook](template/COOKBOOK.en.md) to dot on its own, then provide a target repository and task. This README explains the design: why the method exists, who is responsible, when checks happen and where to adopt it.
+> **Status:** 0.2.0 (unreleased), 0.x. Adapt and validate the templates in each project before relying on them.
+> This repository installs nothing. It does not configure CI, apps, tokens, permissions or branch protection, and it deploys nothing.
 
-## Why · Why use this workflow?
+## Background
 
-When people or multiple AI tools take turns developing a project, “the code is written” is not enough. They need a shared understanding of the requirements, evidence that tests cover the goal, a record of independent review, clarity about authorized actions, and next steps for whoever takes over.
+AI agents can draft specs, write code, run tests, open pull requests and review changes. Producing changes is no longer the slow part. The hard part is knowing whether a change does what was asked, who checked it, what was actually run, and who decided it could ship. Workflow v2 is a lightweight answer to that: shared roles, a fixed loop, and an evidence record that any person or agent can pick up.
 
-Workflow v2 addresses these needs through one collaboration process:
+## Why
 
-- **Align before implementing:** define goals, non-goals, inputs, outputs and acceptance criteria; review requirements and design before discovering too late that the implementation went in the wrong direction.
-- **Prove results with evidence:** first show that a test detects the target problem, then make the minimal implementation and run regression checks. Link each acceptance item to a test or check result.
-- **Check implementation independently:** implementer self-review, independent review and CI serve different purposes; none should be presented as another. CI runs the project’s configured deterministic checks; AI review is recorded separately.
-- **Leave work that others can continue:** record the current commit, completed and unfinished work, risks and next steps so a different person or session can pick it up.
+| Common failure | What Workflow v2 does | Where |
+|---|---|---|
+| "Done" with no proof | Map each acceptance item to a test or check and record the real result | Spec, PR and acceptance templates |
+| A test passes but never caught the problem | Write a failing test first, then make the minimal fix (red → green) | `workflow-v2.md` step 3 |
+| The author's self-check presented as review | Keep implementation and independent review separate; review is tied to the current head | `workflow-v2.md` |
+| Green CI treated as approval | Treat CI, review, merge and deployment as separate gates | `workflow-v2.md`, PR template |
+| An agent that can push assumes it can merge or deploy | Authorize each external action separately; stop on any denial or mismatch | `AGENTS.md.template` |
+| Context lost between sessions or agents | Record state, decisions, evidence and next steps in a handoff | Handoff template |
+| Unclear authorship | Keep AI and human contributions identifiable in commits and PRs | Attribution rules |
 
-These templates organize collaboration. They do not prescribe a model, programming language, product or CI platform, or automatically install tools, enable services or deploy a project.
+## Who
 
-## Who · Who is responsible for what?
+Roles are defined by responsibility, not by product or vendor. One person can hold several roles, but the same actor should not implement a change and also give its independent review.
 
-Roles are defined by responsibility. Each adopting project assigns people or AI tools to them:
+| Role | Filled by | Responsible for | Does not replace |
+|---|---|---|---|
+| **Owner** | A person accountable for the project | Scope and authorization; approving major changes, merges, releases and deployments | — |
+| **Requirements / design reviewer** | Person or AI | Checking the problem, contracts, risks and acceptance criteria | Owner approval |
+| **Implementer** | Usually an AI agent; can be a person | Specs, tests, code, running checks, reporting real evidence | Independent review |
+| **Independent reviewer** | Person, separate AI session, or review service, as the project configures | Reviewing the current head against the spec and evidence | Platform approval from another account, where required |
+| **Automated checks** | CI or scripts, if the project configures them | Running deterministic checks on a specific commit | Review or any approval |
 
-- **Requirements and architecture reviewer:** checks the problem, design, contracts, risks and acceptance criteria.
-- **Implementer:** writes tests, implements and debugs changes, runs project checks, and provides actual evidence.
-- **Independent reviewer:** compares the current changes and evidence with the specification; does not substitute implementer self-review for independent judgment.
-- **Owner:** confirms scope, decides on major changes, merging and releases, and identifies who follows up and archives the work.
+## When
 
-A person requests the task or explicitly authorizes its trigger. AI collaborates within that scope; completing one stage does not expand permission to merge or deploy.
+**Use it** when:
+- an AI agent implements or reviews a feature, fix or refactor;
+- work passes between people, agents or sessions;
+- a change needs an audit trail (security, permissions, data, releases).
 
-No role requires a particular AI brand. An independent internal review can provide analysis, but it is not formal approval by another account on the code-hosting platform. A completed specification for a major change is not the owner’s approval.
+**Scale it down** (suggestion) for documentation-only changes. Skip behavioral red/green tests and say why, but still check content, links, examples and privacy.
 
-## What · What does it provide, and what gets delivered?
+**During a task**, the gates come in a fixed order: authorization before starting → design review before implementation → owner approval before any major change → checks on the current head before review → a fresh pre-merge check before merging → separate authorization for release or deployment.
 
-The repository provides **one shared set of bilingual operational templates**, not separate Chinese and English workflows:
+## Where
 
-- [Project rules](template/AGENTS.md.template): responsibilities, commands and boundaries after adoption.
-- [Workflow specification](template/docs/workflow-v2.md): the collaboration process, reviews, validation and approval requirements.
-- [Specification template](template/docs/specs/TEMPLATE.md): goals, contracts, acceptance, risks and rollback.
-- [PR template](template/PULL_REQUEST_TEMPLATE.md): the changes, validation results and outstanding work.
-- [Acceptance template](template/docs/ACCEPTANCE_TEMPLATE.md): requirements mapped to evidence.
-- [Handoff template](template/docs/HANDOFF_TEMPLATE.md): current status, decisions, next steps and rollback.
+- **In your project repository.** Copy only the files you need and merge them with your existing rules (see [Adoption](docs/ADOPTION.en.md)). The PR template goes wherever your platform reads it, for example `.github/pull_request_template.md` or `.gitea/pull_request_template.md`. Confirm that your platform supports it.
+- **On any platform.** Approvals, protections, checks and review apps differ between platforms such as GitHub and Gitea, so do not assume they are equivalent.
+- **In any execution environment.** The default is cloud/API-first, and it is configurable. Any model, agent or provider can fill a role. A user may choose an environment, and tasks that need local files, apps or signed-in sessions run where that access is authorized. Never switch environment, account or access path to get around a denial.
+- **Evidence lives in the repository and the PR.** Specs go in `docs/specs/`; validation goes in the PR body; outcomes go in acceptance and handoff records.
 
-The README, [Cookbook](template/COOKBOOK.en.md), [adoption guide](docs/ADOPTION.en.md) and [changelog](CHANGELOG.en.md) each have Chinese and English reading versions. They share the six templates above. Keep values and meanings consistent; run the workflow once.
+## How — the loop
 
-A task’s delivery should tell the next person what changed, which commit or snapshot it refers to, how it was validated, who reviewed it, what remains, and the risks and next steps. Report commits, pushes, PRs, merges, releases and deployments separately; do not describe “prepared” as “live.”
+The diagram is in [Workflow diagram](#workflow-diagram). The steps:
 
-## When · When are decisions and checks needed?
+1. **Intake and authorization** (owner). State the goal, non-goals and allowed actions, for example "local only" or "push a task branch and open a draft PR". Without explicit permission, do not push, merge or deploy.
+2. **Spec** (AI drafts or a person writes). Cover the problem, goals and non-goals, invariants, acceptance item → test file/case → input → expected result, risk, rollback, and whether this is a major change. Use `docs/specs/TEMPLATE.md`.
+3. **Design review** (reviewer). If changes are requested, go back to step 2. A **major change** needs explicit owner approval. Major changes include permissions/security, protections or required checks, credentials, releases/deployments, data deletion or irreversible migrations, major dependency upgrades, and large cross-system refactors. A written spec is not an approval.
+4. **Decompose** (*recommended; no template yet*). Split the work into changes that can each be reviewed on their own, each with its own acceptance items and its own branch/PR.
+5. **Red.** Add a test that fails **on the target behavior's assertion**, not on an install or import error.
+6. **Green.** Make the minimal change. Run regression tests and every check the project requires. Record each result as passed, failed, skipped, not run, blocked or not configured.
+7. **Pull request** (PR template). Include scope, the acceptance checklist, a risk level (low/medium/high, with rollback), exact head/base SHAs, red/green evidence, CI results, and anything unverified.
+8. **Independent review** of the current head. Findings go back to step 6. If the head changes, re-check the affected areas and re-confirm that the review still applies.
+   - *Recommended, not implemented:* order findings by severity. When several candidate PRs try to solve the same task, compare them against the same acceptance checklist. Any AI-produced ranking is input; the owner decides.
+9. **Merge gate** (owner). Re-read the exact head/base, PR state, CI on the current head, review validity, attribution and protections. If anything does not hold, **stop**. Merge only with the project's approved strategy. Never bypass protections, force-push or skip a failing check.
+10. **After merge.** Read back the target branch, PR state and actual commit attribution. Record acceptance, remaining risks and the rollback method. Release and deployment need separate authorization.
+11. **Feedback.** Remaining risks and follow-ups become new tasks. Template improvements go through an upgrade PR that compares pinned versions. Rollback is a new revert commit, never a history rewrite.
 
-- **Before starting:** confirm the target, scope and authorization; read project rules, inspect the existing workspace and preserve others’ changes.
-- **Before implementation:** write the specification and review the design; obtain explicit owner approval for major changes.
-- **During a fix:** record the target behavior’s assertion failure first, make the minimal fix, then run regression tests and all project-required checks. For documentation-only changes, validate content, links, examples and privacy rather than fabricating red tests.
-- **At review:** independent review must correspond to the current head or an identified file snapshot; recheck affected areas after changes.
-- **Before pushing or opening a PR:** verify authorization for both actions; use a task branch and Draft PR.
-- **Before merging:** separately confirm merge authorization and project strategy; reread head/base, current CI, valid review, attribution and protections. Checks on an older commit do not establish evidence for the current one.
-- **Before release or deployment:** obtain the relevant authorization; local validation does not establish remote or production validation. Reread the actual outcome afterward, then archive the delivery record.
+## What is in this repository
 
-If review, authentication or required checks are missing, safe, authorized preparation may continue. Mark missing items as blocked, not run or not configured; do not claim that all checks passed or that the work is ready to merge. Repository access alone does not authorize permission changes, merging or deployment.
+| Item | Status | Location |
+|---|---|---|
+| Workflow rules (roles, loop, gates, attribution, privacy) | Provided (document) | `template/docs/workflow-v2.md` |
+| Project rules for agents | Provided (template) | `template/AGENTS.md.template` |
+| Spec with acceptance-to-test mapping and red/green evidence | Provided (template) | `template/docs/specs/TEMPLATE.md` |
+| PR template with acceptance checklist and risk level | Provided (template) | `template/PULL_REQUEST_TEMPLATE.md` |
+| Acceptance record / handoff record | Provided (template) | `template/docs/ACCEPTANCE_TEMPLATE.md`, `HANDOFF_TEMPLATE.md` |
+| Adoption, upgrade, rollback and versioning | Provided (guide) | `docs/ADOPTION.en.md` |
+| Step-by-step cookbook with a 4-case red/green exercise | Provided (guide) | `template/COOKBOOK.en.md` |
+| Test/lint/security commands, independent review mechanism, required checks, merge strategy, release runbook, signing/DCO, execution environment | **Configured per project** | Adaptation table in `workflow-v2.md` |
+| Task decomposition, ranking of candidate PRs, severity ordering of findings | **Recommended, not implemented** | — |
+| CI workflows, bots, apps, tokens, permissions, protections, auto-merge, deployment, license | **Not provided** | — |
 
-## Where · Where is it adopted and run?
+## AI identity and responsibility boundaries
 
-Use the templates inside an actual project: copy only the needed files, reconcile them with existing rules, and fill in the project’s test commands, review mechanism, required checks and merge strategy. See the [adoption guide](docs/ADOPTION.en.md) for paths and upgrades. Do not overwrite existing rules or install duplicate sets for the two languages.
+- An AI agent is a contributor working within scope delegated by a person. It holds no approval authority.
+- AI output is a proposal or evidence, never a human approval or a guarantee. That covers code, reviews, rankings and summaries.
+- These are different things and must be reported separately:
+  - a written spec ≠ an approved spec;
+  - a self-check ≠ independent review;
+  - an AI review ≠ formal platform approval from another account;
+  - passing CI ≠ approval to merge ≠ approval to deploy;
+  - local validation ≠ production validation.
+- Commits keep the true source. AI work uses an identifiable AI author and `Agent: <agent-id>`; human work uses `Agent: human`. A person's approval does not turn AI work into human work. If the tool cannot set an AI author and project rules allow it, disclose the AI origin and the actual author/committer explicitly. If mandatory identity, DCO or signing rules cannot be met, stop.
+- Check existing access before asking for more. Never request secrets in chat. Report a denial instead of working around it.
+- Report outcomes as they are: failed, skipped, blocked and not run are not success.
 
-Execution has a **configurable cloud-first default**. Follow the user’s chosen environment; when a task depends on local files, apps or signed-in sessions, use a suitable environment with authorized access to those resources.
+## Quick start
 
-Verify existing repository access and tool capabilities first. Prefer an already-connected API/connector that supports the operation. A CLI without a login does not imply missing connector access and is not grounds for duplicate authorization requests. Distinguish unsupported capabilities from denied access; never switch environments, accounts or paths to evade restrictions.
+1. Pin a version: a verified tag plus its full commit, or a full commit if there is no tag.
+2. Copy the templates you need into your project and merge them with existing rules.
+3. Fill in the adaptation table: commands, reviewer, required checks, merge strategy, release boundary. Write "not configured" where something does not exist.
+4. Run one small task through the loop, or start with the cookbook exercise.
+5. Adopt the templates through your project's own review. Copying files does not activate any gate.
 
-Preserve truthful contribution origin in the project: humans use their chosen identity without mandatory noreply, and human approval does not turn AI work into human work. When a tool cannot set an AI author, retain the actual author/committer only where project rules permit that fallback, and use explicit AI authored text, an Agent trailer and PR disclosure to explain origin and limitations. Stop and ask if mandatory identity, DCO or signing requirements cannot be met. Provenance declarations are not cryptographic signatures; see the [Cookbook attribution section](template/COOKBOOK.en.md#7-attribution-signatures-and-provenance).
+## Versions, upgrades and rollback
 
-Share reusable methods, not private coordination, credentials, raw logs or private history. Copying templates does not change repository visibility or grant access; review files and the history to be published before sharing. These templates do not replace a license agreement.
+0.x means the templates still need to be validated in each project. Upgrades go through a separate PR that compares two pinned versions. Rollback is a reviewed revert. Upgrading this repository never updates adopting projects automatically. See [Adoption](docs/ADOPTION.en.md) and [Changelog](CHANGELOG.en.md).
 
-## How · Start with one task
+## License
 
-Give dot the [Chinese Cookbook](template/COOKBOOK.md) or [English Cookbook](template/COOKBOOK.en.md), a target repository and a concrete task. It contains a starting prompt, guidance for missing information and step-by-step instructions. Without a project, start with its four-case local red/green exercise; that does not establish validation of a real project or production.
+No license file is included. These templates are not a license grant.
 
-The shortest path is: **confirm the task → specification and design review → failing reproduction → minimal implementation → regression checks → independent review → delivery within the authorized scope**. Merging and deployment are not automatic next steps.
+## Workflow diagram
 
-Current development version: 0.2.0 (unreleased). Pin a full commit when no verified release tag exists; updating this template does not automatically upgrade projects that adopt it.
+This is a proposed generic diagram, not a reproduction of a source image. Blue: AI or human execution. Yellow: review or human decision gate (independent review can be performed by AI; it is not human approval). Green: automation only when configured. Red: stop and report. Documentation-only changes skip behavioral red/green and validate content, links, examples and privacy. Missing required checks block progression; an explicitly inapplicable check is recorded with its reason.
+
+```mermaid
+flowchart TD
+  classDef ai fill:#dbeafe,stroke:#1d4ed8,color:#111
+  classDef human fill:#fde68a,stroke:#b45309,color:#111
+  classDef auto fill:#dcfce7,stroke:#15803d,color:#111
+  classDef stop fill:#fee2e2,stroke:#b91c1c,color:#111
+
+
+  A["Request and authorized scope<br/>(owner)"]:::human
+  B["Spec: goals, non-goals,<br/>acceptance-to-test map, risk, rollback"]:::ai
+  C{"Design review<br/>owner approves major changes"}:::human
+  D["Decompose into reviewable tasks<br/>(recommended)"]:::ai
+  E["Red: target assertion fails"]:::ai
+  F["Implement or revise;<br/>validate applicable checks"]:::ai
+  G["Project checks on current head<br/>(automated only if configured)"]:::auto
+  H["PR: acceptance checklist,<br/>risk level, SHAs, evidence"]:::ai
+  I{"Independent review of current head<br/>AI findings or rankings are input only"}:::human
+  J{"Merge gate: re-read head/base,<br/>CI, review, attribution, protections"}:::human
+  K["Merge by approved strategy,<br/>read back result"]:::human
+  L["Acceptance and handoff record"]:::ai
+  M{"Release or deploy?<br/>separate authorization"}:::human
+  R["Project release runbook<br/>automation only if configured"]:::auto
+  N["Feedback: risks to new tasks,<br/>template upgrade PR, revert if needed"]:::ai
+  S["Stop and report:<br/>blocked, denied, not run, not configured"]:::stop
+
+
+  A --> B --> C
+  C -- "changes requested" --> B
+  C -- "approved" --> D
+  D -- "behavior change" --> E
+  D -- "documentation only: content, links, examples, privacy" --> F
+  E -- "cannot reproduce or env missing" --> S
+  E --> F --> G
+  G -- "fail" --> F
+  G -- "required check blocked, not run or not configured" --> S
+  G -- "pass" --> H --> I
+  I -- "findings or head changed" --> F
+  I -- "accepted" --> J
+  J -- "any mismatch" --> S
+  J -- "all hold" --> K --> L --> M
+  M -- "authorized" --> R --> N
+  M -- "not authorized" --> N
+  N -. "next iteration" .-> A
+```
