@@ -2,83 +2,79 @@
 
 Language / 语言: [简体中文](README.md) · **English**
 
-These templates help people and dot turn requirements into changes that can be checked, reviewed, and handed off. **There is only one set of functional and operational templates; Chinese and English are two ways to read the documentation.** The package contains no automatic installer, CI scripts, or deployment functionality, and prescribes no toolchain for a particular language, product, or platform.
+Development collaboration templates for people and AI: start with requirements and design review, then implement, validate and independently review changes to produce results that can be accepted, traced and handed off. **The core is clear responsibilities, evidence for progress, and stopping when an owner’s decision is needed.**
 
-Configurable environment default: prefer the cloud computer. Follow the user’s task-specific environment choice; when work depends on local files, apps or signed-in sessions, select a suitable environment with authorized access to those resources. Verify the current environment and target before acting. Prefer an existing connected API/connector that supports the operation, and use read-only checks to establish existing repository access and concrete capabilities; do not request duplicate authorization merely because a CLI is not logged in. Distinguish unsupported capabilities from denied access; never switch environments, accounts or access paths to evade a denial or security restriction.
+To start directly, hand the [Cookbook](template/COOKBOOK.en.md) to dot on its own, then provide a target repository and task. This README explains the design: why the method exists, who is responsible, when checks happen and where to adopt it.
 
-## Where to start
+## Why · Why use this workflow?
 
-Hand the [Chinese Cookbook](template/COOKBOOK.md) or [English Cookbook](template/COOKBOOK.en.md) to dot on its own, filling in the target repository and task. Without a project, start with the local four-case red/green exercise.
+When people or multiple AI tools take turns developing a project, “the code is written” is not enough. They need a shared understanding of the requirements, evidence that tests cover the goal, a record of independent review, clarity about authorized actions, and next steps for whoever takes over.
 
-- [Adoption and upgrades](docs/ADOPTION.en.md)
-- [Single shared workflow specification (Chinese/English)](template/docs/workflow-v2.md)
-- [Shared project rules template (Chinese/English)](template/AGENTS.md.template)
-- [Changelog](CHANGELOG.en.md)
+Workflow v2 addresses these needs through one collaboration process:
 
-## Why it is designed this way
+- **Align before implementing:** define goals, non-goals, inputs, outputs and acceptance criteria; review requirements and design before discovering too late that the implementation went in the wrong direction.
+- **Prove results with evidence:** first show that a test detects the target problem, then make the minimal implementation and run regression checks. Link each acceptance item to a test or check result.
+- **Check implementation independently:** implementer self-review, independent review and CI serve different purposes; none should be presented as another. CI runs the project’s configured deterministic checks; AI review is recorded separately.
+- **Leave work that others can continue:** record the current commit, completed and unfinished work, risks and next steps so a different person or session can pick it up.
 
-### Define success before writing the implementation
+These templates organize collaboration. They do not prescribe a model, programming language, product or CI platform, or automatically install tools, enable services or deploy a project.
 
-The specification states goals, non-goals, contracts, and observable acceptance criteria. It lets reviewers find ambiguities early, avoiding shifts in acceptance criteria after implementation. A spec records decisions; it does not mean the owner has already approved them.
+## Who · Who is responsible for what?
 
-### Replace “looks done” with actual evidence
+Roles are defined by responsibility. Each adopting project assigns people or AI tools to them:
 
-Red before green verifies that the test can detect the target defect, then verifies that the minimal fix works. Red must be an assertion failure about expected behavior, not an environment installation or import error. After green, regression tests and full project checks are still required. For documentation-only changes, explain why behavioral tests are not applicable and validate links, content, examples, and privacy instead; do not fabricate red results.
+- **Requirements and architecture reviewer:** checks the problem, design, contracts, risks and acceptance criteria.
+- **Implementer:** writes tests, implements and debugs changes, runs project checks, and provides actual evidence.
+- **Independent reviewer:** compares the current changes and evidence with the specification; does not substitute implementer self-review for independent judgment.
+- **Owner:** confirms scope, decides on major changes, merging and releases, and identifies who follows up and archives the work.
 
-### Separate implementation, self-review, and independent review
+A person requests the task or explicitly authorizes its trigger. AI collaborates within that scope; completing one stage does not expand permission to merge or deploy.
 
-Implementers know their changes best but may overlook their own assumptions. Independent review checks the specification, code, tests, and evidence. CI establishes only the results of configured checks and cannot replace independent judgment. Independent internal analysis is not a formal APPROVE from another account on the platform.
+No role requires a particular AI brand. An independent internal review can provide analysis, but it is not formal approval by another account on the code-hosting platform. A completed specification for a major change is not the owner’s approval.
 
-### Tie gates to the actual candidate commit
+## What · What does it provide, and what gets delivered?
 
-Passing CI on an old commit does not establish that a new commit is safe. Record exact head/base SHAs and the tested commit. PR CI may test a synthetic merge commit, while push CI can test the original head. After head, base, or conflict resolution changes, revalidate affected checks and review validity to avoid merging on stale evidence.
+The repository provides **one shared set of bilingual operational templates**, not separate Chinese and English workflows:
 
-### Authorization, validation, and release are different decisions
+- [Project rules](template/AGENTS.md.template): responsibilities, commands and boundaries after adoption.
+- [Workflow specification](template/docs/workflow-v2.md): the collaboration process, reviews, validation and approval requirements.
+- [Specification template](template/docs/specs/TEMPLATE.md): goals, contracts, acceptance, risks and rollback.
+- [PR template](template/PULL_REQUEST_TEMPLATE.md): the changes, validation results and outstanding work.
+- [Acceptance template](template/docs/ACCEPTANCE_TEMPLATE.md): requirements mapped to evidence.
+- [Handoff template](template/docs/HANDOFF_TEMPLATE.md): current status, decisions, next steps and rollback.
 
-Repository access does not authorize permission changes; finished code does not authorize a push; green CI does not authorize merging or deployment. The templates record these states separately to avoid treating technical success as operational authorization. Stop when protections reject an action, rather than force-pushing or changing settings to get through.
+The README, [Cookbook](template/COOKBOOK.en.md), [adoption guide](docs/ADOPTION.en.md) and [changelog](CHANGELOG.en.md) each have Chinese and English reading versions. They share the six templates above. Keep values and meanings consistent; run the workflow once.
 
-### Traceable provenance without leaking private information
+A task’s delivery should tell the next person what changed, which commit or snapshot it refers to, how it was validated, who reviewed it, what remains, and the risks and next steps. Report commits, pushes, PRs, merges, releases and deployments separately; do not describe “prepared” as “live.”
 
-Commit provenance reflects actual contributions; do not describe human approval as human implementation. Authors/trailers are not cryptographic signatures. Shareable templates contain only generic rules, without private coordination, accounts, addresses, credentials, raw logs, or private history. Supplement scanning with human review.
+## When · When are decisions and checks needed?
 
-Verify existing repository access and tool capabilities before diagnosing connection problems. When a tool cannot set an AI author, retain actual connected-account metadata only where project rules allow the fallback, and identify origin through AI authored, an Agent trailer and accurate PR disclosure. Stop and ask if mandatory attribution rules cannot be met. See the Cookbook attribution section.
+- **Before starting:** confirm the target, scope and authorization; read project rules, inspect the existing workspace and preserve others’ changes.
+- **Before implementation:** write the specification and review the design; obtain explicit owner approval for major changes.
+- **During a fix:** record the target behavior’s assertion failure first, make the minimal fix, then run regression tests and all project-required checks. For documentation-only changes, validate content, links, examples and privacy rather than fabricating red tests.
+- **At review:** independent review must correspond to the current head or an identified file snapshot; recheck affected areas after changes.
+- **Before pushing or opening a PR:** verify authorization for both actions; use a task branch and Draft PR.
+- **Before merging:** separately confirm merge authorization and project strategy; reread head/base, current CI, valid review, attribution and protections. Checks on an older commit do not establish evidence for the current one.
+- **Before release or deployment:** obtain the relevant authorization; local validation does not establish remote or production validation. Reread the actual outcome afterward, then archive the delivery record.
 
-## How a task runs from start to finish
+If review, authentication or required checks are missing, safe, authorized preparation may continue. Mark missing items as blocked, not run or not configured; do not claim that all checks passed or that the work is ready to merge. Repository access alone does not authorize permission changes, merging or deployment.
 
-1. **Locate and read:** confirm the target repository/environment, inspect the working tree, and preserve others' changes; read project rules, run instructions, and relevant specs.
-2. **Specification and design review:** define goals, non-goals, inputs/outputs, invariants, risks, rollback, and acceptance mapping; obtain explicit approval first for major changes.
-3. **Reproduce failure:** write acceptance tests first and record actual evidence of the target assertion failing; save a red-test commit when commits are allowed.
-4. **Minimal implementation:** fix only the target problem; do not obtain green results by deleting tests or weakening assertions.
-5. **Regression testing and checks:** run relevant tests and full project-required checks, distinguishing passed, failed, skipped, not run, and not configured.
-6. **Independent review:** examine the current head or a clearly identified uncommitted snapshot; recheck affected areas after changes.
-7. **PR after authorization:** create the task branch and Draft PR only when pushing and opening a PR are authorized; verify current CI, review, attribution, and protections, without automatically merging.
-8. **Merge and delivery after authorization:** reread head/base and all gates before merging, then reread actual status afterward. Release/deployment requires separate authorization; archive acceptance results and remaining risks.
+## Where · Where is it adopted and run?
 
-If independent review, remote CI, or authentication is missing, safe local preparation may continue, but explicitly mark missing items as blocked/not run. Do not claim that all gates passed.
+Use the templates inside an actual project: copy only the needed files, reconcile them with existing rules, and fill in the project’s test commands, review mechanism, required checks and merge strategy. See the [adoption guide](docs/ADOPTION.en.md) for paths and upgrades. Do not overwrite existing rules or install duplicate sets for the two languages.
 
-## One shared template set, two documentation languages
+Execution has a **configurable cloud-first default**. Follow the user’s chosen environment; when a task depends on local files, apps or signed-in sessions, use a suitable environment with authorized access to those resources.
 
-The following files are the only adoption source. There is no separate English branch of operational rules. Each shared template contains Chinese and English; every change must keep their meanings aligned:
+Verify existing repository access and tool capabilities first. Prefer an already-connected API/connector that supports the operation. A CLI without a login does not imply missing connector access and is not grounds for duplicate authorization requests. Distinguish unsupported capabilities from denied access; never switch environments, accounts or paths to evade restrictions.
 
-- [AGENTS.md.template](template/AGENTS.md.template): project rules.
-- [workflow-v2.md](template/docs/workflow-v2.md): roles, end-to-end workflow, and gates.
-- [Spec template](template/docs/specs/TEMPLATE.md): goals, contracts, tests, and risks.
-- [PR template](template/PULL_REQUEST_TEMPLATE.md): scope, validation, approvals, and unfinished items.
-- [Acceptance template](template/docs/ACCEPTANCE_TEMPLATE.md): requirement-to-evidence mapping.
-- [Handoff template](template/docs/HANDOFF_TEMPLATE.md): status, decisions, next steps, and rollback.
+Preserve truthful contribution origin in the project: humans use their chosen identity without mandatory noreply, and human approval does not turn AI work into human work. When a tool cannot set an AI author, retain the actual author/committer only where project rules permit that fallback, and use explicit AI authored text, an Agent trailer and PR disclosure to explain origin and limitations. Stop and ask if mandatory identity, DCO or signing requirements cannot be met. Provenance declarations are not cryptographic signatures; see the [Cookbook attribution section](template/COOKBOOK.en.md#7-attribution-signatures-and-provenance).
 
-The README, Cookbook, adoption guide, and changelog each provide Chinese and English reading versions, all referencing these six shared templates. Example code is identical; its behavior does not change with the documentation language. Before adoption, reconcile templates with existing project rules item by item, without overwriting those rules or duplicating them into two instruction sets. Both languages express the same rules and fields: keep filled-in values consistent and run the workflow once, not once per language.
+Share reusable methods, not private coordination, credentials, raw logs or private history. Copying templates does not change repository visibility or grant access; review files and the history to be published before sharing. These templates do not replace a license agreement.
 
-## What makes acceptance complete
+## How · Start with one task
 
-Delivery should include: scope of changes; environment and tool versions; exact commits or snapshots; requirement → test → result evidence; red/green and regression results; separate CI and independent-review status; attribution/privacy checks; unverified items, risks, rollback, and next steps. Report commits, pushes, PRs, merges, releases, and deployments separately. Do not describe “ready” as “live.”
+Give dot the [Chinese Cookbook](template/COOKBOOK.md) or [English Cookbook](template/COOKBOOK.en.md), a target repository and a concrete task. It contains a starting prompt, guidance for missing information and step-by-step instructions. Without a project, start with its four-case local red/green exercise; that does not establish validation of a real project or production.
 
-If project-required checks are missing, failed, or pending, do not claim readiness to merge. A local exercise may be accepted as a local exercise; it does not establish validation of a real project, remote environment, or production.
+The shortest path is: **confirm the task → specification and design review → failing reproduction → minimal implementation → regression checks → independent review → delivery within the authorized scope**. Merging and deployment are not automatic next steps.
 
-## Adoption, sharing, and boundaries
-
-Copy only the shared templates you need, filling in commands, roles, required checks, merge strategy, and release boundaries. Copying files does not enable CI, install services, or change permissions. New credentials, external review services, permissions, protections, sharing visibility, merging, and deployment must each follow user approval and project rules.
-
-This repository is a generic, sanitized export without private coordination records. Review files and the history to be published before sharing; do not directly mirror a source repository containing private material. The templates do not replace a license agreement or automatically grant others repository access.
-
-Current development version: 0.2.0 (unreleased). Pin a full commit when no verified release tag exists. Maintaining these templates does not automatically upgrade projects that adopt them.
+Current development version: 0.2.0 (unreleased). Pin a full commit when no verified release tag exists; updating this template does not automatically upgrade projects that adopt it.
