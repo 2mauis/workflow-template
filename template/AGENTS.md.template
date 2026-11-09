@@ -1,0 +1,12 @@
+# 项目开发规则
+
+采用模板版本：<VERSION / COMMIT>。项目负责人：<ROLE>。
+
+1. 读 README、docs/workflow-v2.md、相关 spec 与运行说明。
+2. 检查 git status，保留其他修改；只提交本任务文件。
+3. 按 workflow v2 完成规格、失败复现、实现、回归与独立评审。
+4. 测试命令：<UNIT>、<INTEGRATION>、<LINT>、<SECURITY>；未配置项明确标记。
+5. 合并策略：<PROJECT_APPROVED_STRATEGY>；保护与 required checks：<LIST>。
+6. 提交署名：AI 作者名称可识别，Agent trailer 对应实际贡献来源；人工使用本人选择邮箱。不用邮箱域名判定 AI，不强制人工 noreply，不因人工批准 AI 改动就改成人工来源。
+7. 重大变更、对外发布、部署、凭据及权限变更分别取得所需批准。不绕过保护、不强推、不跳过失败检查。
+8. 不将个人助手、设备或生活分工写入项目文件与 PR。不提交凭据、私人日志、真实个人邮箱正文或原始资料导出。
