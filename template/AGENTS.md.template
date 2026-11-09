@@ -1,4 +1,14 @@
-# 项目开发规则
+# 项目开发规则 / Project development rules
+
+此文件是唯一共享模板。中英文表达相同规则和字段；填值保持一致，流程只执行一次。两种表述若有实质冲突，先澄清，不自行扩大权限。
+
+This is the single shared template. Both languages express the same rules and fields; keep filled-in values consistent and run the workflow once. Clarify any substantive discrepancy before proceeding; do not expand permissions yourself.
+
+## 简体中文
+
+### 项目开发规则
+
+环境默认（可按项目配置）：云电脑优先；用户指定环境或任务依赖本地资源时选择合适的授权环境。优先已连接 API/连接器，不为绕过访问拒绝或安全限制而切换路径。
 
 采用模板版本：<VERSION / COMMIT>。项目负责人：<ROLE>。
 
@@ -7,6 +17,23 @@
 3. 按 workflow v2 完成规格、失败复现、实现、回归与独立评审。
 4. 测试命令：<UNIT>、<INTEGRATION>、<LINT>、<SECURITY>；未配置项明确标记。
 5. 合并策略：<PROJECT_APPROVED_STRATEGY>；保护与 required checks：<LIST>。
-6. 提交署名：AI 作者名称可识别，Agent trailer 对应实际贡献来源；人工使用本人选择邮箱。不用邮箱域名判定 AI，不强制人工 noreply，不因人工批准 AI 改动就改成人工来源。
+6. 提交署名：先核实已有授权和工具能力，不把命令行未登录误判为连接器无权限。真实记录 author/committer 与 AI 来源；工具支持且项目允许时用 AI 作者名称。工具不能指定 AI author 且项目允许时，保留实际连接账户身份，提交明确 AI authored 及 Agent trailer，PR 披露实际署名与限制。强制身份/DCO/签名无法满足时停止请示，不绕过。人工保留选定身份，不强制 noreply；详见 workflow-v2 署名规则。
 7. 重大变更、对外发布、部署、凭据及权限变更分别取得所需批准。不绕过保护、不强推、不跳过失败检查。
 8. 不将个人助手、设备或生活分工写入项目文件与 PR。不提交凭据、私人日志、真实个人邮箱正文或原始资料导出。
+
+## English
+
+### Project development rules
+
+Environment default (configurable per project): prefer the cloud computer; follow a user-specified environment or use a suitable authorized environment for required local resources. Prefer connected APIs/connectors; never switch paths to evade denied access or security restrictions.
+
+Adopted template version: <VERSION / COMMIT>. Project owner: <ROLE>.
+
+1. Read README, docs/workflow-v2.md, relevant specs, and run instructions.
+2. Check git status and preserve other changes; commit only files belonging to this task.
+3. Follow workflow v2 for specification, failure reproduction, implementation, regression testing, and independent review.
+4. Test commands: <UNIT>, <INTEGRATION>, <LINT>, <SECURITY>; explicitly mark unconfigured items.
+5. Merge strategy: <PROJECT_APPROVED_STRATEGY>; protections and required checks: <LIST>.
+6. Commit attribution: verify existing access and tool capabilities first; a CLI without a login does not imply missing connector access. Record author/committer and AI origin truthfully; use an AI author name when supported and permitted. If the tool cannot set an AI author and project rules allow it, retain the actual connected-account identity, state AI authored and an Agent trailer in the commit, and disclose actual attribution and limitations in the PR. Stop and ask when mandatory identity/DCO/signing rules cannot be met; do not bypass them. Humans retain their chosen identity without mandatory noreply; see workflow-v2 attribution rules.
+7. Obtain the required approvals separately for major changes, external releases, deployments, credentials, and permission changes. Do not bypass protections, force-push, or skip failing checks.
+8. Do not put personal-assistant, device, or personal-life responsibilities in project files or PRs. Do not commit credentials, private logs, real personal email addresses in body text, or raw source-material exports.
