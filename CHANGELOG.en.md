@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.2.0 — Unreleased
+- Upgrades the workflow to v2.1 (file name stays template/docs/workflow-v2.md): default roles and models, the per-batch loop with S1/S2/S3 handling, stop points that require user approval, task-brief requirements, separate scan and push steps, branch and document delivery, retrospectives and continuous learning, plus an in-document change log; the AGENTS template now references v2.1.
 - Adds a configurable cloud-first default, with boundaries for user-selected environments, local-resource dependencies and access restrictions.
 - Clarifies verification of existing access, conditional truthful AI attribution with limited tools, and stopping for mandatory attribution-rule conflicts.
 - Provides complete Simplified Chinese and English reading documents; the six shared templates remain one set of bilingual files with identical rules, safety boundaries, and code semantics.
