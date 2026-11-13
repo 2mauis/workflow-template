@@ -71,7 +71,7 @@ This is the single shared template. Both languages express the same rules and fi
 
 #### 交接与任务书
 - 任务书写明：基点 commit、分支名、Draft PR 目标分支、提交顺序（先改规格 → 先红的测试 → 实现）、硬约束、验收标准和署名 trailer。
-- 署名 trailer 照抄仓库署名脚本或策略文件原文（见适配表「署名 trailer 来源」），不凭记忆书写；项目没有署名脚本或策略文件时，按「署名」中的来源 trailer 规则填写（云端运行写 `Code-Tool`，本地电脑运行写 `Host-Id`）。
+- 署名 trailer 照抄仓库署名脚本或策略文件原文（见适配表「署名 trailer 来源」），不凭记忆书写；项目没有署名脚本或策略文件时，按「署名」中的来源 trailer 规则填写（云端运行只写 `Code-Tool`，本地电脑运行写 `Code-Tool` 并加 `Host-Id`）。
 - 给编码工具的输入框只粘贴任务书正文，不夹带对话或说明；发送前截图核对。
 - 提交云端任务前核对：环境是云端而不是本地，模型与档位正确。提交后必须有人跟到任务完成，并主动汇报结果。
 - 取回改动时，优先让编码工具推送 `codex/*` 分支并开 Draft PR。
@@ -79,9 +79,9 @@ This is the single shared template. Both languages express the same rules and fi
 #### 署名
 先用只读检查核实目标仓库已有授权和当前工具能力；命令行未登录不等于连接器无权访问，不应因此要求重复授权。Git author/committer 元数据须如实保留和披露，不伪装身份；工具支持且项目允许时使用可识别的 AI 作者名称。若工具不能指定 AI author，且项目规则允许，可保留工具实际设置的连接账户身份，在提交信息明确写明 AI authored 并加 `Agent: <实际来源标识>`，在 PR 披露 AI 来源、实际 author/committer 及工具限制，不宣称作者字段已经设为 AI。若项目强制 AI 作者名称、DCO 或特定签名且当前路径无法满足，停止相关提交/发布并请示，不绕过、不擅自改规则或创建凭据。trailer 的具体键名与格式以项目仓库的署名脚本或策略文件原文为准。
 
-项目没有署名脚本或策略文件时，在其他 trailer（如 `Agent: <实际来源标识>`）之外，按编码 agent 的运行环境加一行来源 trailer：
+项目没有署名脚本或策略文件时，在其他 trailer（如 `Agent: <实际来源标识>`）之外，按编码 agent 的运行环境加来源 trailer：
 - 在云端环境运行时（例如 Codex 云端）：只写工具本身的标识，例如 `Code-Tool: codex <模型> <档位>`，不写 Host-Id。
-- 在本地电脑上运行时：加 `Host-Id: <host-id>`，写本地电脑的 host id。
+- 在本地电脑上运行时：同样写 `Code-Tool: codex <模型> <档位>`，并加 `Host-Id: <host-id>`，写本地电脑的 host id；两行都写，不能只写 Host-Id。
 
 文档、示例和任务书模板只用占位符，不写任何真实主机名。注意：在本地电脑上运行时采用这条，host id 会出现在公开的提交记录里。
 
@@ -112,7 +112,7 @@ This is the single shared template. Both languages express the same rules and fi
 - 独立评审机制：<REVIEWER_OR_SERVICE>（默认 Claude，Opus 5.5 High，私有 Claude Project）
 - 编码工具与档位：<CODING_TOOL_AND_TIER>（默认 Codex 云端，GPT-6.1 Sol，Extra High）
 - 技术研究角色：<RESEARCH_ROLE>（项目没有配置时：由负责编程的 agent 自己查官方文档并附来源链接）
-- 署名 trailer 来源：<ATTRIBUTION_SCRIPT_OR_POLICY>（项目没有署名脚本或策略文件时：云端运行写 `Code-Tool: <工具> <模型> <档位>`，本地电脑运行写 `Host-Id: <host-id>`，见「署名」；本地运行时 host id 会出现在公开的提交记录里）
+- 署名 trailer 来源：<ATTRIBUTION_SCRIPT_OR_POLICY>（项目没有署名脚本或策略文件时：云端运行写 `Code-Tool: <工具> <模型> <档位>`，本地电脑运行写 `Code-Tool: <工具> <模型> <档位>` 并加 `Host-Id: <host-id>`，见「署名」；本地运行时 host id 会出现在公开的提交记录里）
 - required checks：<CHECK_NAMES>
 - 合并策略及批准依据：<STRATEGY_AND_APPROVAL>
 - 发布与部署：<SEPARATE_AUTHORIZATION_AND_RUNBOOK>
@@ -127,7 +127,7 @@ This is the single shared template. Both languages express the same rules and fi
     - 「默认分工」：项目没有配置技术研究角色时，由负责编程的 agent 自己查官方文档并附来源链接（负责人决定）。
     - 「每批闭环与分级处理」「交接与任务书」「分支、PR 与文档交付」「复盘与自动学习」四节。
     - 「环境与已有授权」：开工前集中授权；密钥与凭据不落 agent 工作机。
-    - 「署名」：项目没有署名脚本或策略文件时，按编码 agent 的运行环境加一行来源 trailer：云端运行只写工具标识（如 `Code-Tool: codex <模型> <档位>`），不写 Host-Id；本地电脑运行才加 `Host-Id: <host-id>`。文档只用占位符，并提示本地运行时 host id 会出现在公开的提交记录里（负责人决定）。
+    - 「署名」：项目没有署名脚本或策略文件时，按编码 agent 的运行环境加来源 trailer：云端运行只写工具标识（如 `Code-Tool: codex <模型> <档位>`），不写 Host-Id；本地电脑运行写同样的工具标识并加 `Host-Id: <host-id>`。文档只用占位符，并提示本地运行时 host id 会出现在公开的提交记录里（负责人决定）。
     - 「隐私与发布」：扫描与推送分两条命令；任何命中先停下上报；提交与 PR 不写花费或用量。
     - 「项目适配表」：编码工具与档位、技术研究角色、署名 trailer 来源三行，后两行写明项目没有配置时的默认做法。
   - 调整：
@@ -204,7 +204,7 @@ Every merge needs review first; never merge first and review later. Passing CI o
 
 #### Handoff and task briefs
 - A task brief states the base commit, branch name, Draft PR target branch, commit order (spec changes → failing tests first → implementation), hard constraints, acceptance criteria, and the attribution trailer.
-- Copy the attribution trailer verbatim from the repository's attribution script or policy file (see "Attribution trailer source" in the configuration table); do not write it from memory. If the project has no attribution script or policy file, follow the source trailer rule under "Attribution" (`Code-Tool` when running in the cloud, `Host-Id` when running on a local computer).
+- Copy the attribution trailer verbatim from the repository's attribution script or policy file (see "Attribution trailer source" in the configuration table); do not write it from memory. If the project has no attribution script or policy file, follow the source trailer rule under "Attribution" (only `Code-Tool` when running in the cloud; `Code-Tool` plus `Host-Id` when running on a local computer).
 - Paste only the brief body into the coding tool's input box, with no conversation or commentary; check it with a screenshot before sending.
 - Before submitting a cloud task, verify that the environment is cloud, not local, and that the model and tier are correct. After submission, someone must follow it through to completion and report the result proactively.
 - To retrieve changes, prefer having the coding tool push a `codex/*` branch and open a Draft PR.
@@ -212,9 +212,9 @@ Every merge needs review first; never merge first and review later. Passing CI o
 #### Attribution
 First use read-only checks to verify existing access to the target repository and the capabilities of the current tools. A CLI without a login does not mean the connector lacks access; do not request duplicate authorization on that basis. Preserve and disclose Git author/committer metadata truthfully, without impersonation; use an identifiable AI author name when the tool supports it and project rules allow it. If the tool cannot set an AI author and project rules permit the fallback, retain the connected-account identity actually set by the tool, explicitly state AI authored in the commit message, add `Agent: <actual-source-identifier>`, and disclose AI origin, the actual author/committer and the tool limitation in the PR. Do not claim that the author field is an AI identity. If mandatory AI-author, DCO or signing rules cannot be met through the current path, stop the affected commit/publication and ask for direction; do not bypass requirements, change rules or create credentials on your own. Take the exact trailer keys and format from the project's attribution script or policy file verbatim.
 
-If the project has no attribution script or policy file, add one source trailer alongside the other trailers (such as `Agent: <actual-source-identifier>`), depending on where the coding agent runs:
+If the project has no attribution script or policy file, add source trailers alongside the other trailers (such as `Agent: <actual-source-identifier>`), depending on where the coding agent runs:
 - In a cloud environment (for example Codex cloud): record only the tool's own identifier, such as `Code-Tool: codex <model> <tier>`; do not add Host-Id.
-- On a local computer: add `Host-Id: <host-id>` with the local computer's host id.
+- On a local computer: record the same `Code-Tool: codex <model> <tier>` and add `Host-Id: <host-id>` with the local computer's host id; write both lines, never Host-Id alone.
 
 Documents, examples, and task-brief templates use only placeholders, never a real host name. Note: when this rule is applied on a local computer, the host id appears in the public commit history.
 
@@ -245,7 +245,7 @@ Commit messages and PR bodies do not include cost or usage figures.
 - Independent review mechanism: <REVIEWER_OR_SERVICE> (default Claude, Opus 5.5 High, private Claude Project)
 - Coding tool and tier: <CODING_TOOL_AND_TIER> (default Codex cloud, GPT-6.1 Sol, Extra High)
 - Technical research role: <RESEARCH_ROLE> (if the project has not configured one: the agent responsible for coding checks the official documentation itself and attaches source links)
-- Attribution trailer source: <ATTRIBUTION_SCRIPT_OR_POLICY> (if the project has no attribution script or policy file: `Code-Tool: <tool> <model> <tier>` when running in the cloud, `Host-Id: <host-id>` when running on a local computer, see "Attribution"; for local runs the host id appears in the public commit history)
+- Attribution trailer source: <ATTRIBUTION_SCRIPT_OR_POLICY> (if the project has no attribution script or policy file: `Code-Tool: <tool> <model> <tier>` when running in the cloud, `Code-Tool: <tool> <model> <tier>` plus `Host-Id: <host-id>` when running on a local computer, see "Attribution"; for local runs the host id appears in the public commit history)
 - required checks: <CHECK_NAMES>
 - Merge strategy and approval basis: <STRATEGY_AND_APPROVAL>
 - Release and deployment: <SEPARATE_AUTHORIZATION_AND_RUNBOOK>
@@ -260,7 +260,7 @@ Record observations, deductions, and unknowns separately. Simulated tests do not
     - "Default roles": if the project has not configured a technical research role, the agent responsible for coding checks the official documentation itself and attaches source links (owner's decision).
     - Four sections: "Per-batch loop and severity handling", "Handoff and task briefs", "Branches, PRs, and document delivery", and "Retrospectives and continuous learning".
     - "Environment and existing access": one-batch authorization before starting; keys and credentials never land on the agent's work machine.
-    - "Attribution": if the project has no attribution script or policy file, add one source trailer depending on where the coding agent runs: in the cloud, only the tool identifier (such as `Code-Tool: codex <model> <tier>`), with no Host-Id; on a local computer, `Host-Id: <host-id>`. Documents use only placeholders, with a note that for local runs the host id appears in the public commit history (owner's decision).
+    - "Attribution": if the project has no attribution script or policy file, add source trailers depending on where the coding agent runs: in the cloud, only the tool identifier (such as `Code-Tool: codex <model> <tier>`), with no Host-Id; on a local computer, the same tool identifier plus `Host-Id: <host-id>`. Documents use only placeholders, with a note that for local runs the host id appears in the public commit history (owner's decision).
     - "Privacy and release": separate scan and push commands; stop and report on any hit; no cost or usage figures in commits and PRs.
     - "Project configuration": three rows for coding tool and tier, technical research role, and attribution trailer source; the last two state the default when the project has not configured them.
   - Changed:

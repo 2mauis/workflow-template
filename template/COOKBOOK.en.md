@@ -44,7 +44,7 @@ Copy only the templates you need and reconcile them with existing files item by 
 - template/docs/ACCEPTANCE_TEMPLATE.md and HANDOFF_TEMPLATE.md → project docs/.
 - template/PULL_REQUEST_TEMPLATE.md → a platform-recognized location such as .github/pull_request_template.md; verify other platforms first.
 
-Record the full source commit and adoption date. Pin both a verified tag and commit when available; otherwise pin the commit, without assuming a release already exists. Fill in tests, reviews, checks, and owners, plus the configuration rows added in v2.1: coding tool and tier, technical research role, and attribution trailer source. If the project has no technical research role, enter “the agent responsible for coding checks the official documentation itself and attaches source links”; if it has no attribution script or policy file, enter “`Code-Tool: <tool> <model> <tier>` when running in the cloud, `Host-Id: <host-id>` when running on a local computer,” and be aware that for local runs the host id appears in the public commit history. Copying files does not activate platform gates. New Apps, credentials, paid capabilities, repository protections, and permissions require separate confirmation. Adoption changes must also go through project review.
+Record the full source commit and adoption date. Pin both a verified tag and commit when available; otherwise pin the commit, without assuming a release already exists. Fill in tests, reviews, checks, and owners, plus the configuration rows added in v2.1: coding tool and tier, technical research role, and attribution trailer source. If the project has no technical research role, enter “the agent responsible for coding checks the official documentation itself and attaches source links”; if it has no attribution script or policy file, enter “`Code-Tool: <tool> <model> <tier>` when running in the cloud, `Code-Tool: <tool> <model> <tier>` plus `Host-Id: <host-id>` when running on a local computer,” and be aware that for local runs the host id appears in the public commit history. Copying files does not activate platform gates. New Apps, credentials, paid capabilities, repository protections, and permissions require separate confirmation. Adoption changes must also go through project review.
 
 Universal requirements: scope, observable acceptance criteria, actual evidence, independent review, privacy checks, and delivery status.
 Project-specific options: CI platform, SAST/lint tools, signing mechanisms, deployment, release, and merge strategy. Once the project requires an item, it is no longer an optional check that can be skipped at will.
@@ -97,7 +97,7 @@ Draft PR target branch:
 Commit order: spec changes → failing tests first → implementation
 Hard constraints:
 Acceptance criteria: requirement → test file/case → input → expected result
-Attribution trailer (copied verbatim from the repository's attribution script or policy file; if there is none: add Code-Tool: <tool> <model> <tier> when running in the cloud, or Host-Id: <host-id> when running on a local computer):
+Attribution trailer (copied verbatim from the repository's attribution script or policy file; if there is none: add Code-Tool: <tool> <model> <tier> when running in the cloud, or both Code-Tool: <tool> <model> <tier> and Host-Id: <host-id> when running on a local computer):
 ```
 
 Before submitting a cloud task, verify that the environment is cloud, not local, and that the model and tier are correct. After submission, watch it through to completion and report the result proactively. To retrieve changes, prefer having the coding tool push a `codex/*` branch and open a Draft PR, provided that pushing and opening a PR have been authorized.
@@ -181,9 +181,9 @@ When checking, record:
 
 First use read-only checks to verify existing access to the target repository and the capabilities of the current tools. A CLI without a login does not mean the connector lacks access; do not request duplicate authorization on that basis. Preserve and disclose Git author/committer metadata truthfully, without impersonation; use an identifiable AI author name when the tool supports it and project rules allow it. If the tool cannot set an AI author and project rules permit the fallback, retain the connected-account identity actually set by the tool, explicitly state AI authored in the commit message, add `Agent: <actual-source-identifier>`, and disclose AI origin, the actual author/committer and the tool limitation in the PR. Do not claim that the author field is an AI identity. If mandatory AI-author, DCO or signing rules cannot be met through the current path, stop the affected commit/publication and ask for direction; do not bypass requirements, change rules or create credentials on your own. Take the exact trailer keys and format from the project's attribution script or policy file verbatim; do not write them from memory.
 
-If the project has no attribution script or policy file, add one source trailer alongside the other trailers (such as `Agent: <actual-source-identifier>`), depending on where the coding agent runs:
+If the project has no attribution script or policy file, add source trailers alongside the other trailers (such as `Agent: <actual-source-identifier>`), depending on where the coding agent runs:
 - In a cloud environment (for example Codex cloud): record only the tool's own identifier, such as `Code-Tool: codex <model> <tier>`; do not add Host-Id.
-- On a local computer: add `Host-Id: <host-id>` with the local computer's host id.
+- On a local computer: record the same `Code-Tool: codex <model> <tier>` and add `Host-Id: <host-id>` with the local computer's host id; write both lines, never Host-Id alone.
 
 This document and its examples use only placeholders, never a real host name. Note: when this rule is applied on a local computer, the host id appears in the public commit history.
 

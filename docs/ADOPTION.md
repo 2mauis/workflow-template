@@ -12,7 +12,7 @@
 3. 将 `AGENTS.md.template` 保存为项目 AGENTS.md；将 PR 模板放入目标平台认可的位置（例如 `.github/pull_request_template.md` 或 `.gitea/pull_request_template.md`），采用前验证平台支持。
 4. 填写项目命令、测试路径、独立评审机制、编码工具与档位、技术研究角色、署名 trailer 来源、required checks、发布边界与合并策略。workflow 中的默认工具与模型可在适配表覆盖。以下两项项目没有配置时不写“未配置”，而是填默认做法：
    - 技术研究角色：由负责编程的 agent 自己查官方文档，并附上来源链接。
-   - 署名 trailer 来源：没有署名脚本或策略文件时，按编码 agent 的运行环境另加一行来源 trailer。云端运行（例如 Codex 云端）只写工具标识，如 `Code-Tool: codex <模型> <档位>`，不写 Host-Id；本地电脑运行才写 `Host-Id: <host-id>`。文档只用占位符，不写真实主机名。采用前须知：本地运行时 host id 会出现在公开的提交记录里。
+   - 署名 trailer 来源：没有署名脚本或策略文件时，按编码 agent 的运行环境另加来源 trailer。云端运行（例如 Codex 云端）只写工具标识，如 `Code-Tool: codex <模型> <档位>`，不写 Host-Id；本地电脑运行写同样的工具标识并加 `Host-Id: <host-id>`。文档只用占位符，不写真实主机名。采用前须知：本地运行时 host id 会出现在公开的提交记录里。
 
    其余不存在的检查写“未配置”，不得写已通过。
 5. 项目通过自身的评审和批准后合入，记录模板来源版本；复制文件不等于部署流程生效。
