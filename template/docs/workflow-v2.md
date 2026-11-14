@@ -1,4 +1,4 @@
-# 协作工作流 v2.1 / Collaboration workflow v2.1
+# 协作工作流 v2.2 / Collaboration workflow v2.2
 
 此文件是唯一共享模板。中英文表达相同规则和字段；填值保持一致，流程只执行一次。两种表述若有实质冲突，先澄清，不自行扩大权限。
 
@@ -6,7 +6,7 @@ This is the single shared template. Both languages express the same rules and fi
 
 ## 简体中文
 
-### 协作工作流 v2.1
+### 协作工作流 v2.2
 
 > 通用基线。项目采用时填写角色、命令、检查与合并策略。本文不授予外部操作权限；文中的“自动推进”只在已授权范围内适用。文中的工具与模型均为默认值，项目可在适配表中覆盖。文中“用户”指为本任务授权的人（通常是项目负责人）。版本变化见文末「变更记录」。
 
@@ -38,11 +38,15 @@ This is the single shared template. Both languages express the same rules and fi
 本节细化上面闭环的第 3–5 步。每一批改动按同一循环执行：
 1. 实现：实现者（默认 Codex 云端）按任务书实现。
 2. 加强测试：适用时做竞态检测（例如 Go 的 `-race`）；多次连跑；功能开关/noop 的两种极性都覆盖。
-3. 评审：评审者（默认 Claude）评审当前改动并给出决策。
-4. 按分级处理：
-   - S1（阻断）或测试不过：直接驳回，写重写任务书交实现者重做，不问用户。
-   - S2（需修复）：实现者修完后重新跑同一套测试并复评，不问用户。
-   - S3 与低风险项：按评审决策自动推进到下一个停止点，不中途停摆。
+3. 评审：评审者（默认 Claude）评审当前改动并给出决策；对每条 S2 标明是否挡合并或主流程，未标明的按“挡”处理。
+4. 按分级处理。采用 MVP 迭代：每轮只修 S1 和挡合并或主流程的 S2，不为修完所有小问题而无限延长本轮：
+   - S1（阻断）或测试不过：直接驳回，写重写任务书交实现者在本轮重做，不问用户。
+   - 挡合并或挡主流程的 S2：实现者在本轮修完后重新跑同一套测试并复评，不问用户。
+   - 其余 S2、S3 和小问题：登记到下一轮，按评审决策推进到下一个停止点，本轮不再继续修。
+
+登记不等于豁免：登记项写明级别、来源和对应的 head，放在项目指定的位置（见适配表「下一轮登记位置」），请求合并批准时一并列出。测试不过和停止点事项不能登记顺延。
+
+加强测试和独立评审合成一轮交接：写一份同时覆盖两者的任务书，该轮结束时只回报一次；只有中途卡住时才提前上报。停止点事项和扫描命中不受此限，出现即停下上报。
 
 卡住时依次尝试：查官方文档、参考同类成熟项目、问评审者、换方法重试。穷尽这些手段后才上报，并附已尝试的方法与证据。
 
@@ -54,16 +58,17 @@ This is the single shared template. Both languages express the same rules and fi
 
 除重大变更外，以下事项也必须停下等用户批准：
 - 合并；
-- 部署；
+- 部署（每次部署单独批准，不能沿用前一次部署批准）；
 - 改写已推送历史；
 - 凭据；
 - 真实隐私命中（扫描命中一律先停下上报，见「隐私与发布」；确认为真实命中后，如何处理须经用户批准）；
 - 政策文件（`.github/**`、扫描脚本、`.gitleaks.toml`、`.githooks` 等）；
 - 新增依赖；
 - 超出已批准范围；
-- 重大取舍。
+- 重大取舍；
+- 放宽测试或门禁保证。
 
-不属于上述事项的，在已授权范围内按「每批闭环与分级处理」自动推进。
+上述批准必须来自用户（项目负责人）本人。其他 agent 或 bot 给出的“批准”不算用户批准，包括评审 agent 的通过结论和平台上 bot 账号的 approve。不属于上述事项的，在已授权范围内按「每批闭环与分级处理」自动推进。
 
 新增依赖（如 `go.mod`/`go.sum`、Cargo、npm 等）先做架构评估（必要性、替代方案、维护与许可、安全影响），评估通过并获批后再落地。
 
@@ -73,15 +78,16 @@ This is the single shared template. Both languages express the same rules and fi
 - 任务书写明：基点 commit、分支名、Draft PR 目标分支、提交顺序（先改规格 → 先红的测试 → 实现）、硬约束、验收标准和署名 trailer。
 - 署名 trailer 照抄仓库署名脚本或策略文件原文（见适配表「署名 trailer 来源」），不凭记忆书写；项目没有署名脚本或策略文件时，按「署名」中的来源 trailer 规则填写（云端运行只写 `Code-Tool`，本地电脑运行写 `Code-Tool` 并加 `Host-Id`）。
 - 给编码工具的输入框只粘贴任务书正文，不夹带对话或说明；发送前截图核对。
-- 提交云端任务前核对：环境是云端而不是本地，模型与档位正确。提交后必须有人跟到任务完成，并主动汇报结果。
-- 取回改动时，优先让编码工具推送 `codex/*` 分支并开 Draft PR。
+- 项目指定的云端编码环境（默认见「默认分工」）是完整工作环境：可以读写、向约定分支推送（分支前缀见适配表，默认 `codex/*`）、开 Draft PR。不要给它下“只读”或“不推送”的指令，除非用户在该任务中明确收窄权限。取回改动时，优先让它推送约定分支并开 Draft PR。这只覆盖约定分支和 Draft PR，不改变停止点：合并、部署、改写已推送历史、政策文件等仍按「重大变更与需用户批准的停止点」停下等批准。
+- 提交云端任务前核对：环境是云端而不是本地，模型与档位正确，且该环境的 Git 托管连接已授权本仓库（实际查看连接状态，确认能看到本仓库和目标分支）。任务入口没有分支选择器时（例如网页任务），把 base 分支写在任务正文里。提交后必须有人跟到任务完成，并主动汇报结果。
+- 遇到授权拒绝或分支不可用时，先重试并实际验证当前的授权与分支状态，不沿用旧的失败结论，也不因此搁置任务。验证后仍被拒绝的，按「环境与已有授权」如实上报，不绕过。
 
 #### 署名
 先用只读检查核实目标仓库已有授权和当前工具能力；命令行未登录不等于连接器无权访问，不应因此要求重复授权。Git author/committer 元数据须如实保留和披露，不伪装身份；工具支持且项目允许时使用可识别的 AI 作者名称。若工具不能指定 AI author，且项目规则允许，可保留工具实际设置的连接账户身份，在提交信息明确写明 AI authored 并加 `Agent: <实际来源标识>`，在 PR 披露 AI 来源、实际 author/committer 及工具限制，不宣称作者字段已经设为 AI。若项目强制 AI 作者名称、DCO 或特定签名且当前路径无法满足，停止相关提交/发布并请示，不绕过、不擅自改规则或创建凭据。trailer 的具体键名与格式以项目仓库的署名脚本或策略文件原文为准。
 
 项目没有署名脚本或策略文件时，在其他 trailer（如 `Agent: <实际来源标识>`）之外，按编码 agent 的运行环境加来源 trailer：
 - 在云端环境运行时（例如 Codex 云端）：只写工具本身的标识，例如 `Code-Tool: codex <模型> <档位>`，不写 Host-Id。
-- 在本地电脑上运行时：同样写 `Code-Tool: codex <模型> <档位>`，并加 `Host-Id: <host-id>`，写本地电脑的 host id；两行都写，不能只写 Host-Id。
+- 在本地电脑上运行时：同样写 `Code-Tool: codex <模型> <档位>`，并加 `Host-Id: <host-id>`；Host-Id 只写为该电脑约定的 id，不写真实主机名。两行都写，不能只写 Host-Id。
 
 文档、示例和任务书模板只用占位符，不写任何真实主机名。注意：在本地电脑上运行时采用这条，host id 会出现在公开的提交记录里。
 
@@ -94,25 +100,33 @@ This is the single shared template. Both languages express the same rules and fi
 
 推送和发布前做隐私与凭据安全检查：
 - 扫描和推送必须分两条命令执行，不得放在同一条命令里。
-- 扫描有任何命中（包括认为是误报的），都先停下上报，不得自行判断后推送。
+- 检查范围至少包括个人信息、主机名、内网域名、邮箱（noreply 和文档保留域名除外）、IP、token 和密钥，并覆盖待推送的改动、提交说明和 PR 正文。
+- 扫描有任何命中（包括认为是误报的），都先停下上报，不得自行判断后推送，也不得自行把命中加入白名单、忽略规则或基线。
 
-提交信息与 PR 正文不写花费或用量信息。
+提交信息、PR 正文和其他对外内容不写人名、花费或用量、地址或城市；Git author/committer 元数据按「署名」如实保留。
 
 #### 分支、PR 与文档交付
-- 已关闭 PR 的分支不删除。「清理无效 PR」指关闭功能重复的 PR，不指删除分支。
+- 没有用户指示时不删除分支。已关闭 PR 的分支不删除。「清理无效 PR」指关闭功能重复的 PR，不指删除分支。
+- 登记到下一轮的事项写在项目指定的位置（见适配表「下一轮登记位置」）；未指定时写在相关 PR 的评论和交接记录中，不为登记去改仓库设置。
 - 项目文档以仓库为准，改动走分支和 PR；交付时给仓库链接，不发压缩包。
 
 #### 复盘与自动学习
 - 运行不顺或被用户指出问题时，主动复盘：把教训写进 agent 记忆或技能，并通过分支和 PR 更新本 workflow 的变更记录。复盘做法以官方文档和成熟开源项目为参照。
-- 每项任务完成后汇报结果，并说明是否还有下一步。
+- 每项任务完成后汇报结果，并说明是否还有下一步。加强测试和独立评审作为一轮交接时，按「每批闭环与分级处理」只回报一次。
+
+#### 术语、方案与沟通
+- 专有名词按该项目已有文档和约定的含义理解；含义不清、又会影响方向时，先确认再开工。
+- 不要擅自改用户（项目负责人）已定下的部署方案或实测方案；有疑问先确认。
+- 需要用户本人登录、授权或确认时，立刻列出具体步骤请其操作，不搁置等待，也不索要密码、token 或私钥。
 
 #### 项目适配表
 - 测试与 lint：<COMMANDS>
 - 隐私/secret/SAST：<COMMANDS_OR_UNCONFIGURED>
 - 独立评审机制：<REVIEWER_OR_SERVICE>（默认 Claude，Opus 5.5 High，私有 Claude Project）
-- 编码工具与档位：<CODING_TOOL_AND_TIER>（默认 Codex 云端，GPT-6.1 Sol，Extra High）
+- 编码工具与档位：<CODING_TOOL_AND_TIER>（默认 Codex 云端，GPT-6.1 Sol，Extra High；云端任务的约定分支前缀默认 `codex/*`）
 - 技术研究角色：<RESEARCH_ROLE>（项目没有配置时：由负责编程的 agent 自己查官方文档并附来源链接）
 - 署名 trailer 来源：<ATTRIBUTION_SCRIPT_OR_POLICY>（项目没有署名脚本或策略文件时：云端运行写 `Code-Tool: <工具> <模型> <档位>`，本地电脑运行写 `Code-Tool: <工具> <模型> <档位>` 并加 `Host-Id: <host-id>`，见「署名」；本地运行时 host id 会出现在公开的提交记录里）
+- 下一轮登记位置：<BACKLOG_LOCATION>（项目没有指定时：相关 PR 的评论和交接记录）
 - required checks：<CHECK_NAMES>
 - 合并策略及批准依据：<STRATEGY_AND_APPROVAL>
 - 发布与部署：<SEPARATE_AUTHORIZATION_AND_RUNBOOK>
@@ -121,6 +135,17 @@ This is the single shared template. Both languages express the same rules and fi
 观察结果、推导与未知分开记录。模拟测试不代表真实环境验证；标明实际测试条件和样本范围。生成文件应从项目指定源文件再生成，不直接手改生成结果；项目没有此类文件则不适用。
 
 #### 变更记录
+- 2026-11-15 — v2.2（来源与评审依据见模板仓库的 `docs/reviews/v2.2-review.md`）
+  - 新增：
+    - 「每批闭环与分级处理」：MVP 迭代，每轮只修 S1 和挡合并或主流程的 S2，其余 S2、S3 和小问题登记到下一轮；评审者标明每条 S2 是否挡合并或主流程；登记不等于豁免，请求合并批准时一并列出；加强测试和独立评审合成一轮交接，只回报一次，停止点事项和扫描命中仍然出现即报。
+    - 「交接与任务书」：项目指定的云端编码环境是完整工作环境，可读写、向约定分支推送、开 Draft PR，不下“只读”或“不推送”指令，且不改变停止点；提交前确认 Git 托管连接已授权本仓库；任务入口没有分支选择器时把 base 分支写在任务正文里；遇到授权拒绝或分支不可用先重试并实际验证，不沿用旧的失败结论，也不搁置。
+    - 「术语、方案与沟通」一节：专有名词按项目含义理解，含义不清且会影响方向时先确认；不擅自改已定的部署或实测方案；需要用户本人登录或授权时立刻列出步骤。
+    - 「项目适配表」：「下一轮登记位置」一行；「编码工具与档位」一行补充云端任务的约定分支前缀。
+  - 调整：
+    - 「重大变更与需用户批准的停止点」：写明批准必须来自用户本人，其他 agent 或 bot 的“批准”不算；补充“每次部署单独批准”，并新增“放宽测试或门禁保证”（收紧，不放宽原清单）。
+    - 「署名」：Host-Id 只写约定的 id，不写真实主机名。
+    - 「隐私与发布」：列出扫描的最低检查范围；任何命中都不得自行加入白名单；对外内容除不写花费或用量外，也不写人名、地址或城市。
+    - 「分支、PR 与文档交付」：没有用户指示时不删除分支；登记项的默认位置。
 - 2026-11-12 — v2.1
   - 新增：
     - 「默认分工（项目可覆盖）」：设计与评审、编码、技术研究的默认角色与模型，以及启动前核对模型与档位。
@@ -139,7 +164,7 @@ This is the single shared template. Both languages express the same rules and fi
 
 ## English
 
-### Collaboration workflow v2.1
+### Collaboration workflow v2.2
 
 > Generic baseline. Fill in roles, commands, checks, and merge strategy when adopting it for a project. This document does not authorize external actions; "proceed automatically" applies only within the authorized scope. Tools and models named here are defaults; projects may override them in the configuration table. "The user" means the person who authorized the task (usually the project owner). See "Change log" at the end for version changes.
 
@@ -171,11 +196,15 @@ Perform requirements and architecture review, implementation and debugging, and 
 This section details steps 3–5 of the workflow above. Every batch of changes follows the same loop:
 1. Implement: the implementer (default Codex cloud) implements according to the task brief.
 2. Strengthened tests: race detection where applicable (such as Go's `-race`); repeated runs; and coverage of both polarities of feature switches/noop paths.
-3. Review: the reviewer (default Claude) reviews the current changes and decides.
-4. Handle by severity:
-   - S1 (blocking) or failing tests: reject directly and write a rewrite brief for the implementer, without asking the user.
-   - S2 (must fix): the implementer fixes it, then the same tests are rerun and the change is re-reviewed, without asking the user.
-   - S3 and low-risk items: proceed automatically to the next stop point per the review decision; do not stall midway.
+3. Review: the reviewer (default Claude) reviews the current changes and decides, marking for each S2 issue whether it blocks a merge or the main flow; an unmarked S2 issue is treated as blocking.
+4. Handle by severity. Use MVP iteration: each round fixes only S1 issues and S2 issues that block a merge or the main flow, and is not extended indefinitely to fix every small item:
+   - S1 (blocking) or failing tests: reject directly and write a rewrite brief for the implementer to rework in this round, without asking the user.
+   - S2 that blocks a merge or the main flow: the implementer fixes it in this round, then the same tests are rerun and the change is re-reviewed, without asking the user.
+   - Remaining S2 issues, S3 issues, and small items: log them for the next round and proceed to the next stop point per the review decision; do not keep fixing them in this round.
+
+Logging an item does not waive it: record its severity, source, and the head it applies to in the location the project designates (see "Next-round log location" in the configuration table), and list the logged items when requesting merge approval. Failing tests and stop-point items cannot be deferred by logging them.
+
+Strengthened tests and independent review form one handoff: write a single brief that covers both, and report once when that round finishes; report earlier only if work gets stuck mid-round. Stop-point items and scan hits are not subject to this limit: stop and report as soon as they occur.
 
 When stuck, try in order: check official documentation, look at comparable mature projects, ask the reviewer, and retry with a different approach. Escalate only after these are exhausted, with the attempts and evidence attached.
 
@@ -187,16 +216,17 @@ Major changes include, at minimum, permission/security boundaries, repository pr
 
 In addition to major changes, the following must also stop and wait for user approval:
 - merging;
-- deployment;
+- deployment (each deployment needs its own approval; do not reuse a previous deployment approval);
 - rewriting pushed history;
 - credentials;
 - real privacy hits (any scan hit means stop and report first, see "Privacy and release"; once a hit is confirmed as real, how to handle it needs user approval);
 - policy files (`.github/**`, scan scripts, `.gitleaks.toml`, `.githooks`, and similar);
 - new dependencies;
 - work beyond the approved scope;
-- major trade-offs.
+- major trade-offs;
+- relaxing a test or gate guarantee.
 
-Anything not listed above proceeds automatically within the authorized scope under "Per-batch loop and severity handling".
+These approvals must come from the user (the project owner) in person. An "approval" from another agent or bot is not user approval; this includes a review agent's passing verdict and an approve from a bot account on the platform. Anything not listed above proceeds automatically within the authorized scope under "Per-batch loop and severity handling".
 
 New dependencies (for example `go.mod`/`go.sum`, Cargo, npm) need an architecture assessment first (necessity, alternatives, maintenance and licensing, security impact); land them only after the assessment passes and approval is given.
 
@@ -206,15 +236,16 @@ Every merge needs review first; never merge first and review later. Passing CI o
 - A task brief states the base commit, branch name, Draft PR target branch, commit order (spec changes → failing tests first → implementation), hard constraints, acceptance criteria, and the attribution trailer.
 - Copy the attribution trailer verbatim from the repository's attribution script or policy file (see "Attribution trailer source" in the configuration table); do not write it from memory. If the project has no attribution script or policy file, follow the source trailer rule under "Attribution" (only `Code-Tool` when running in the cloud; `Code-Tool` plus `Host-Id` when running on a local computer).
 - Paste only the brief body into the coding tool's input box, with no conversation or commentary; check it with a screenshot before sending.
-- Before submitting a cloud task, verify that the environment is cloud, not local, and that the model and tier are correct. After submission, someone must follow it through to completion and report the result proactively.
-- To retrieve changes, prefer having the coding tool push a `codex/*` branch and open a Draft PR.
+- The cloud coding environment the project designates (default under "Default roles") is a full working environment: it may read and write, push to the agreed branches (branch prefix in the configuration table, default `codex/*`), and open a Draft PR. Do not instruct it to be "read-only" or "not to push," unless the user explicitly narrows permissions for that task. To retrieve changes, prefer having it push the agreed branch and open a Draft PR. This covers only the agreed branches and Draft PRs and does not change the stop points: merging, deployment, rewriting pushed history, policy files, and the rest still stop and wait for approval under "Major changes and stop points that require user approval".
+- Before submitting a cloud task, verify that the environment is cloud, not local, that the model and tier are correct, and that the environment's Git hosting connection is authorized for this repository (check the connection state itself and confirm that this repository and the target branch are visible). If the task entry point has no branch picker (for example a web task), state the base branch in the task body. After submission, someone must follow it through to completion and report the result proactively.
+- On an authorization denial or an unavailable branch, retry and actually verify the current authorization and branch state; do not reuse an earlier failure conclusion, and do not shelve the task on that basis. If access is still denied after verification, report it truthfully under "Environment and existing access"; do not work around it.
 
 #### Attribution
 First use read-only checks to verify existing access to the target repository and the capabilities of the current tools. A CLI without a login does not mean the connector lacks access; do not request duplicate authorization on that basis. Preserve and disclose Git author/committer metadata truthfully, without impersonation; use an identifiable AI author name when the tool supports it and project rules allow it. If the tool cannot set an AI author and project rules permit the fallback, retain the connected-account identity actually set by the tool, explicitly state AI authored in the commit message, add `Agent: <actual-source-identifier>`, and disclose AI origin, the actual author/committer and the tool limitation in the PR. Do not claim that the author field is an AI identity. If mandatory AI-author, DCO or signing rules cannot be met through the current path, stop the affected commit/publication and ask for direction; do not bypass requirements, change rules or create credentials on your own. Take the exact trailer keys and format from the project's attribution script or policy file verbatim.
 
 If the project has no attribution script or policy file, add source trailers alongside the other trailers (such as `Agent: <actual-source-identifier>`), depending on where the coding agent runs:
 - In a cloud environment (for example Codex cloud): record only the tool's own identifier, such as `Code-Tool: codex <model> <tier>`; do not add Host-Id.
-- On a local computer: record the same `Code-Tool: codex <model> <tier>` and add `Host-Id: <host-id>` with the local computer's host id; write both lines, never Host-Id alone.
+- On a local computer: record the same `Code-Tool: codex <model> <tier>` and add `Host-Id: <host-id>`; Host-Id carries only the id agreed for that computer, never its real host name. Write both lines, never Host-Id alone.
 
 Documents, examples, and task-brief templates use only placeholders, never a real host name. Note: when this rule is applied on a local computer, the host id appears in the public commit history.
 
@@ -227,25 +258,33 @@ Keep personal coordination information separate from project development rules. 
 
 Run privacy and credential checks before every push and release:
 - Scanning and pushing must be two separate commands, never one.
-- If the scan reports any hit (including one you believe is a false positive), stop and report it first; do not decide on your own and push.
+- The check covers at least personal information, host names, internal domains, email addresses (except noreply and documentation-reserved domains), IP addresses, tokens, and keys, across the changes to be pushed, the commit messages, and the PR body.
+- If the scan reports any hit (including one you believe is a false positive), stop and report it first; do not decide on your own and push, and do not add the hit to an allowlist, ignore rule, or baseline on your own.
 
-Commit messages and PR bodies do not include cost or usage figures.
+Commit messages, PR bodies, and other outward-facing content do not include personal names, cost or usage figures, or addresses or cities; Git author/committer metadata is preserved truthfully under "Attribution".
 
 #### Branches, PRs, and document delivery
-- Do not delete the branches of closed PRs. "Clean up invalid PRs" means closing PRs that duplicate functionality, not deleting branches.
+- Do not delete branches without a user instruction. Do not delete the branches of closed PRs. "Clean up invalid PRs" means closing PRs that duplicate functionality, not deleting branches.
+- Log next-round items in the location the project designates (see "Next-round log location" in the configuration table); if none is designated, log them in comments on the relevant PR and in the handoff record. Do not change repository settings in order to log them.
 - The repository is the source of truth for project documents; changes go through branches and PRs. Deliver a repository link, not an archive file.
 
 #### Retrospectives and continuous learning
 - When a run goes badly or the user points out a problem, run a retrospective proactively: record the lesson in agent memory or a skill, and update this workflow's change log through a branch and PR. Base the retrospective practice on official documentation and mature open-source projects.
-- After each task, report the result and state whether there is a next step.
+- After each task, report the result and state whether there is a next step. When strengthened tests and independent review form one handoff, report once as described under "Per-batch loop and severity handling".
+
+#### Terms, plans, and communication
+- Interpret project-specific terms according to the project's own documents and conventions; if the meaning is unclear and it would affect direction, confirm before starting work.
+- Do not unilaterally change a deployment plan or a real-environment test plan the user (the project owner) has already set; confirm first when in doubt.
+- When a step needs the user to sign in, authorize, or confirm in person, list the concrete steps for them immediately; do not shelve the task while waiting, and do not ask for passwords, tokens, or private keys.
 
 #### Project configuration
 - Tests and lint: <COMMANDS>
 - Privacy/secrets/SAST: <COMMANDS_OR_UNCONFIGURED>
 - Independent review mechanism: <REVIEWER_OR_SERVICE> (default Claude, Opus 5.5 High, private Claude Project)
-- Coding tool and tier: <CODING_TOOL_AND_TIER> (default Codex cloud, GPT-6.1 Sol, Extra High)
+- Coding tool and tier: <CODING_TOOL_AND_TIER> (default Codex cloud, GPT-6.1 Sol, Extra High; the agreed branch prefix for cloud tasks defaults to `codex/*`)
 - Technical research role: <RESEARCH_ROLE> (if the project has not configured one: the agent responsible for coding checks the official documentation itself and attaches source links)
 - Attribution trailer source: <ATTRIBUTION_SCRIPT_OR_POLICY> (if the project has no attribution script or policy file: `Code-Tool: <tool> <model> <tier>` when running in the cloud, `Code-Tool: <tool> <model> <tier>` plus `Host-Id: <host-id>` when running on a local computer, see "Attribution"; for local runs the host id appears in the public commit history)
+- Next-round log location: <BACKLOG_LOCATION> (if the project has not designated one: comments on the relevant PR and the handoff record)
 - required checks: <CHECK_NAMES>
 - Merge strategy and approval basis: <STRATEGY_AND_APPROVAL>
 - Release and deployment: <SEPARATE_AUTHORIZATION_AND_RUNBOOK>
@@ -254,6 +293,17 @@ Commit messages and PR bodies do not include cost or usage figures.
 Record observations, deductions, and unknowns separately. Simulated tests do not establish validation in a real environment; state the actual test conditions and sample scope. Regenerate generated files from project-designated source files instead of hand-editing the output. This does not apply if the project has no such files.
 
 #### Change log
+- 2026-11-15 — v2.2 (sources and review basis: `docs/reviews/v2.2-review.en.md` in the template repository)
+  - Added:
+    - "Per-batch loop and severity handling": MVP iteration, where each round fixes only S1 issues and S2 issues that block a merge or the main flow, and the remaining S2 issues, S3 issues, and small items are logged for the next round; the reviewer marks whether each S2 issue blocks a merge or the main flow; logging does not waive an item, and logged items are listed when requesting merge approval; strengthened tests and independent review form one handoff with one report, while stop-point items and scan hits are still reported as soon as they occur.
+    - "Handoff and task briefs": the cloud coding environment the project designates is a full working environment that may read and write, push to the agreed branches, and open a Draft PR; it is not given "read-only" or "do not push" instructions, and the stop points are unchanged. Confirm that the Git hosting connection is authorized for this repository before submitting; state the base branch in the task body when the task entry point has no branch picker; on an authorization denial or an unavailable branch, retry and actually verify rather than reusing an earlier failure conclusion or shelving the task.
+    - The "Terms, plans, and communication" section: interpret project-specific terms as the project defines them and confirm first when the meaning is unclear and would affect direction; do not unilaterally change a deployment or real-environment test plan that has been set; list the steps immediately when the user must sign in or authorize in person.
+    - "Project configuration": the "Next-round log location" row; the "Coding tool and tier" row now includes the agreed branch prefix for cloud tasks.
+  - Changed:
+    - "Major changes and stop points that require user approval": approvals must come from the user in person, and an "approval" from another agent or bot does not count; clarifies that each deployment needs its own approval, and adds "relaxing a test or gate guarantee" (a tightening, not a loosening of the previous list).
+    - "Attribution": Host-Id carries only the agreed id, never a real host name.
+    - "Privacy and release": the minimum scope of the scan is listed; no hit may be added to an allowlist on the agent's own decision; outward-facing content also omits personal names, addresses, and cities, in addition to cost or usage figures.
+    - "Branches, PRs, and document delivery": do not delete branches without a user instruction; default location for logged items.
 - 2026-11-12 — v2.1
   - Added:
     - "Default roles (projects may override)": default roles and models for design and review, coding, and technical research, plus the pre-start model and tier check.
