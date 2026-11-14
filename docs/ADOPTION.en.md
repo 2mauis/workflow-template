@@ -4,7 +4,7 @@ Start with the [standalone Cookbook you can hand to dot](../template/COOKBOOK.en
 
 The Chinese and English adoption guides both point to the same set of bilingual shared templates in `template/`. Each field has exactly one meaning and value; keep the two languages consistent, and do not adopt two sets of rules.
 
-The current workflow version is v2.1. The rules file is still named `template/docs/workflow-v2.md`; the version is given by the file title and the "Change log" at its end.
+The current workflow version is v2.2. The rules file is still named `template/docs/workflow-v2.md`; the version is given by the file title and the "Change log" at its end.
 
 ## First adoption
 1. If a verified release tag exists, record the tag and its full commit; if there is no tag, pin the full commit and note that it is unreleased. Do not rely on a movable main.
@@ -34,7 +34,17 @@ When upgrading from v2 to v2.1, also check the following:
 - Whether the default roles fit this project; if not, override them in the configuration table.
 - Whether new rules such as the stop-point list and separate scan and push conflict with the project's existing gates; confirm any conflict rather than silently replacing existing rules.
 
+When upgrading from v2.1 to v2.2, also check the following:
+- Whether per-batch severity handling now follows MVP iteration: this round fixes only S1 issues and S2 issues that block a merge or the main flow, and logs the rest for the next round; whether the reviewer marks if each S2 issue blocks a merge or the main flow.
+- Whether strengthened tests and independent review form one handoff, reported once at the end of that round; whether stop-point items and scan hits are still reported immediately.
+- Whether the cloud coding environment the project designates is treated as a full working environment (it may push to the agreed branches and open a Draft PR), not a read-only environment; and whether that is mistaken for permission to merge or deploy.
+- Whether authorization denials or unavailable branches are retried and actually verified, rather than reusing an earlier failure conclusion or shelving the task.
+- Whether the configuration table includes "Next-round log location"; when none is set, whether backlog items are written in comments on the relevant PR and in the handoff record; do not change repository settings in order to log them.
+- Whether project-specific terms are interpreted as the project defines them, and whether deployment or real-environment test plans that have already been set are left unchanged unless first confirmed; whether the concrete steps are listed immediately when the user must sign in or authorize in person.
+- Whether stop points include "each deployment needs its own approval" and "relaxing a test or gate guarantee"; whether it is stated that an "approval" from another agent or bot is not user approval.
+- Whether every scan hit (including a suspected false positive) stops and is reported first, and is not added to an allowlist on the agent's own decision; whether Host-Id uses only the agreed id.
+
 ## Versioning
 0.x means the templates still need to be adapted and validated in each project. Patch versions fix wording; minor versions add compatible templates; incompatible process changes bump the major version once a stable version exists. Released versions come with a CHANGELOG entry and a Git tag; unreleased changes under development are recorded as Unreleased and are not described as released ahead of time.
 
-The template repository version (such as 0.2.0) and the workflow version (such as v2.1) are numbered separately: the former identifies a release of the whole template set, the latter the workflow rules themselves, recorded in the title and change log of `workflow-v2.md`.
+The template repository version (such as 0.2.0) and the workflow version (such as v2.2) are numbered separately: the former identifies a release of the whole template set, the latter the workflow rules themselves, recorded in the title and change log of `workflow-v2.md`.

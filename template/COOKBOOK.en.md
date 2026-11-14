@@ -1,8 +1,8 @@
-# Development workflow Cookbook for dot (workflow v2.1)
+# Development workflow Cookbook for dot (workflow v2.2)
 
 This is a standalone set of instructions you can hand to dot to start work. Its goal is to turn requirements into verifiable, handoff-ready changes, without requiring a particular product, deployment platform, or external review service. This document does not grant authorization or automatically install tools, connect accounts, configure CI, or enable repository protections.
 
-This Cookbook matches workflow v2.1. The rules file is template/docs/workflow-v2.md; its name does not change with minor versions, and the version is given by the file title and the "Change log" at its end.
+This Cookbook matches workflow v2.2. The rules file is template/docs/workflow-v2.md; its name does not change with minor versions, and the version is given by the file title and the "Change log" at its end.
 
 The Chinese and English Cookbooks describe the same workflow and refer to one shared set of bilingual templates. Choose a reading language; do not run the workflow twice or install a second language-specific rule set.
 
@@ -10,7 +10,7 @@ The Chinese and English Cookbooks describe the same workflow and refer to one sh
 
 Send this file to dot as an attachment or in full, followed by the text below. Only the target repository and task are required; if you do not have a repository yet, keep “local exercise.”
 
-> Please start work using the attached Cookbook (workflow v2.1).
+> Please start work using the attached Cookbook (workflow v2.2).
 > Target repository: local exercise / the repository link or local directory I provide
 > Task: run the threshold example in this document first / the specific change I describe
 > Work boundaries: local preparation, testing, and delivery only by default; do not push, open a PR, merge, or deploy.
@@ -25,11 +25,11 @@ dot should first:
 1. Confirm the repository and task supplied by the user. If multiple repositories have the same name, the target branch is unclear, or the task has material ambiguity, ask one minimal clarifying question. Without a project, use the local exercise in section 5; do not create a remote repository.
 2. Use the user's specified computer/environment. If none is specified, select an existing environment that can access the target. Verify the path, repository origin, current branch, and working-tree status first. Preserve others' uncommitted changes; do not automatically clean them up, reset them, or include them in this task's commit.
 3. Read the target repository's applicable AGENTS.md, README, contribution/run instructions, and relevant specs. Existing project rules take precedence. If they conflict with these instructions or the user's requirements, explain and confirm the conflict rather than silently replacing them.
-4. If the full template set is available, read README.en.md, docs/ADOPTION.en.md, and template/docs/workflow-v2.md (workflow v2.1) in that order, then use the spec, acceptance, handoff, and PR templates as needed. Template locations are not fixed locations in the target project.
+4. If the full template set is available, read README.en.md, docs/ADOPTION.en.md, and template/docs/workflow-v2.md (workflow v2.2) in that order, then use the spec, acceptance, handoff, and PR templates as needed. Template locations are not fixed locations in the target project.
 5. Detect the test commands and tool versions actually available; do not infer them solely from examples. List the independent review mechanism, coding tool and tier, technical research role, attribution trailer source, CI/required checks, merge strategy, and authorized scope. Mark nonexistent project items as “not configured,” never as passed. The technical research role and the attribution trailer source are exceptions: if the project has not configured them, follow the defaults in sections 4 and 7 instead of writing “not configured.” If the project specifies a model and tier, confirm that they can be selected before starting design, review, or coding; if not, stop and report, and do not switch models or lower the tier on your own.
 6. Provide a short statement of goals, scope, check plan, blockers, and expected deliverables, and list every permission the end-to-end task needs in one batch. If login/connection is missing, ask the user to complete it through the product's supported secure method. Do not ask for passwords, tokens, or private keys in chat/files.
 
-The minimum parameters are “where” and “what.” The environment can be detected; test commands come from the project. Without a specified merge strategy, do not merge. Without a specified external review service, do not call one. If independent review is unavailable, preparation and self-review may continue, but independent review must be marked blocked; do not claim readiness to merge. The workflow v2.1 default roles (Claude for design and review, Codex cloud for coding) apply only when the project has adopted them and the tools are available; this Cookbook does not require them.
+The minimum parameters are “where” and “what.” The environment can be detected; test commands come from the project. Without a specified merge strategy, do not merge. Without a specified external review service, do not call one. If independent review is unavailable, preparation and self-review may continue, but independent review must be marked blocked; do not claim readiness to merge. The workflow v2.2 default roles (Claude for design and review, Codex cloud for coding) apply only when the project has adopted them and the tools are available; this Cookbook does not require them.
 
 Configurable environment default: prefer the cloud computer. Follow the user’s task-specific environment choice; when work depends on local files, apps or signed-in sessions, select a suitable environment with authorized access to those resources. Verify the current environment and target before acting. Prefer an existing connected API/connector that supports the operation, and use read-only checks to establish existing repository access and concrete capabilities; do not request duplicate authorization merely because a CLI is not logged in. Distinguish unsupported capabilities from denied access; never switch environments, accounts or access paths to evade a denial or security restriction.
 
@@ -39,12 +39,12 @@ Before starting, inventory every permission the end-to-end task needs (repositor
 
 Copy only the templates you need and reconcile them with existing files item by item, without overwriting project rules:
 - template/AGENTS.md.template → project AGENTS.md.
-- template/docs/workflow-v2.md → project docs/workflow-v2.md (same file name; the content is v2.1).
+- template/docs/workflow-v2.md → project docs/workflow-v2.md (same file name; the content is v2.2).
 - template/docs/specs/TEMPLATE.md → project docs/specs/TEMPLATE.md.
 - template/docs/ACCEPTANCE_TEMPLATE.md and HANDOFF_TEMPLATE.md → project docs/.
 - template/PULL_REQUEST_TEMPLATE.md → a platform-recognized location such as .github/pull_request_template.md; verify other platforms first.
 
-Record the full source commit and adoption date. Pin both a verified tag and commit when available; otherwise pin the commit, without assuming a release already exists. Fill in tests, reviews, checks, and owners, plus the configuration rows added in v2.1: coding tool and tier, technical research role, and attribution trailer source. If the project has no technical research role, enter “the agent responsible for coding checks the official documentation itself and attaches source links”; if it has no attribution script or policy file, enter “`Code-Tool: <tool> <model> <tier>` when running in the cloud, `Code-Tool: <tool> <model> <tier>` plus `Host-Id: <host-id>` when running on a local computer,” and be aware that for local runs the host id appears in the public commit history. Copying files does not activate platform gates. New Apps, credentials, paid capabilities, repository protections, and permissions require separate confirmation. Adoption changes must also go through project review.
+Record the full source commit and adoption date. Pin both a verified tag and commit when available; otherwise pin the commit, without assuming a release already exists. Fill in tests, reviews, checks, and owners, plus the configuration rows for coding tool and tier, technical research role, and attribution trailer source (added in v2.1 and still used in v2.2). If the project has no technical research role, enter “the agent responsible for coding checks the official documentation itself and attaches source links”; if it has no attribution script or policy file, enter “`Code-Tool: <tool> <model> <tier>` when running in the cloud, `Code-Tool: <tool> <model> <tier>` plus `Host-Id: <host-id>` when running on a local computer,” and be aware that for local runs the host id appears in the public commit history. Copying files does not activate platform gates. New Apps, credentials, paid capabilities, repository protections, and permissions require separate confirmation. Adoption changes must also go through project review.
 
 Universal requirements: scope, observable acceptance criteria, actual evidence, independent review, privacy checks, and delivery status.
 Project-specific options: CI platform, SAST/lint tools, signing mechanisms, deployment, release, and merge strategy. Once the project requires an item, it is no longer an optional check that can be skipped at will.
@@ -75,20 +75,22 @@ Write acceptance tests first. Verify that red means an assertion about the expec
 
 Independent review must correspond to the current head. Without a commit, tie it to an explicit file snapshot/checksum and explain the limitation. Subsequent changes require rerunning affected checks and updating the review. Fix failures and review again; do not delete tests, weaken assertions, or skip gates.
 
-### Per-batch loop and severity handling (v2.1)
-Every batch of changes follows the same loop: implement → strengthened tests (race detection where applicable, such as Go's `-race`; repeated runs; and coverage of both polarities of feature switches/noop paths) → independent review decides → handle by severity:
-- S1 (blocking) or failing tests: reject directly and write a rewrite brief, without asking the user.
-- S2 (must fix): fix it, then rerun the same tests and re-review, without asking the user.
-- S3 and low-risk items: proceed to the next stop point per the review decision; do not stall midway.
+### Per-batch loop and severity handling (v2.2)
+Every batch of changes follows the same loop: implement → strengthened tests (race detection where applicable, such as Go's `-race`; repeated runs; and coverage of both polarities of feature switches/noop paths) → independent review decides → handle by severity. Use MVP iteration: each round fixes only S1 issues and S2 issues that block a merge or the main flow, and is not extended indefinitely to fix every small item:
+- S1 (blocking) or failing tests: reject directly and write a rewrite brief to rework in this round, without asking the user.
+- S2 that blocks a merge or the main flow: fix it in this round, then rerun the same tests and re-review, without asking the user. The reviewer must mark whether each S2 issue blocks a merge or the main flow; an unmarked S2 issue is treated as blocking.
+- Remaining S2 issues, S3 issues, and small items: log them for the next round and proceed to the next stop point per the review decision; do not keep fixing them in this round. Logging does not waive an item; list logged items when requesting merge approval.
+
+Strengthened tests and independent review form one handoff: write a single brief that covers both, and report once when that round finishes; report earlier only if work gets stuck mid-round. Stop-point items and scan hits are not covered by this limit and are reported as soon as they occur.
 
 When stuck, first check official documentation, look at comparable mature projects, ask the reviewer, and retry with a different approach. Escalate only after these are exhausted, with the attempts and evidence attached.
 
-### Items that must stop for user approval (v2.1)
-In addition to the major changes above, the following must stop and wait for user approval: merging; deployment; rewriting pushed history; credentials; real privacy hits; policy files (`.github/**`, scan scripts, `.gitleaks.toml`, `.githooks`, and similar); new dependencies; work beyond the approved scope; major trade-offs. Everything else proceeds within the authorized scope under the loop above.
+### Items that must stop for user approval (v2.2)
+In addition to the major changes above, the following must stop and wait for user approval: merging; deployment (each deployment needs its own approval); rewriting pushed history; credentials; real privacy hits; policy files (`.github/**`, scan scripts, `.gitleaks.toml`, `.githooks`, and similar); new dependencies; work beyond the approved scope; major trade-offs; relaxing a test or gate guarantee. These approvals must come from the user (the project owner) in person; an "approval" from another agent or bot is not user approval. Everything else proceeds within the authorized scope under the loop above. Do not unilaterally change a deployment plan or a real-environment test plan that has already been set; confirm first when in doubt.
 
 New dependencies (for example `go.mod`/`go.sum`, Cargo, npm) need an architecture assessment first: necessity, alternatives, maintenance and licensing, and security impact. Land them only after the assessment passes and approval is given. Every merge needs review first; never merge first and review later. A person decides when a Draft PR becomes ready and whether it is merged.
 
-### Copyable task brief (v2.1)
+### Copyable task brief (v2.2)
 Use this when handing implementation to a coding tool. Paste only the brief body into the input box, with no conversation or commentary; check it with a screenshot before sending.
 ```text
 Base commit:
@@ -100,7 +102,9 @@ Acceptance criteria: requirement → test file/case → input → expected resul
 Attribution trailer (copied verbatim from the repository's attribution script or policy file; if there is none: add Code-Tool: <tool> <model> <tier> when running in the cloud, or both Code-Tool: <tool> <model> <tier> and Host-Id: <host-id> when running on a local computer):
 ```
 
-Before submitting a cloud task, verify that the environment is cloud, not local, and that the model and tier are correct. After submission, watch it through to completion and report the result proactively. To retrieve changes, prefer having the coding tool push a `codex/*` branch and open a Draft PR, provided that pushing and opening a PR have been authorized.
+The cloud coding environment the project designates (default: Codex cloud) is a full working environment: it may read and write, push to the agreed branches (default prefix `codex/*`), and open a Draft PR. Do not instruct it to be "read-only" or "not to push," unless the user explicitly narrows permissions for that task. This does not change the stop points. To retrieve changes, prefer having it push the agreed branch and open a Draft PR, provided that pushing and opening a PR have been authorized.
+
+Before submitting a cloud task, verify that the environment is cloud, not local, that the model and tier are correct, and that the environment's Git hosting connection is authorized for this repository. If the task entry point has no branch picker, state the base branch in the task body. After submission, watch it through to completion and report the result proactively. On an authorization denial or an unavailable branch, retry and actually verify the current authorization and branch state; do not reuse an earlier failure conclusion, and do not shelve the task on that basis.
 
 ### Copyable delivery record
 ```text
@@ -112,6 +116,7 @@ Cause of red and results of green:
 Strengthened tests (race, repeated runs, both switch polarities):
 Full checks, CI, and independent review (list separately):
 Review severity (S1/S2/S3) and how it was handled:
+S2/S3 items logged for the next round (use the "Next-round log location" in the configuration table; if none is set, write them in comments on the relevant PR and in the handoff record; do not change repository settings in order to log them):
 Privacy and credential scan command and result (separate from the push command):
 Risks, unverified items, blockers, and next steps:
 Committed/pushed/PR opened/merged/released/deployed? (answer separately):
@@ -195,7 +200,7 @@ Authors/trailers are provenance declarations, not cryptographic signatures. The 
 
 Share reusable methods, not private context. Export using an explicit file allowlist. Have a human review each file and scan for secrets, real email addresses, account identifiers, internal network addresses, device paths, private logs, and raw chats. Allow example placeholders only; do not embed private project links. Scanning is an aid, not a safety guarantee.
 
-Run privacy and credential checks before every push and release; scan and push as two separate commands, and stop and report on any hit (see section 6).
+Run privacy and credential checks before every push and release; scan and push as two separate commands, and stop and report on any hit (see section 6). Commit messages, PRs, and other outward-facing content do not include personal names, cost or usage figures, or addresses or cities.
 
 If the source repository contains private material, use a clean export with fresh history. Do not directly push --mirror, copy .git, or make the entire repository public. Public visibility, invitations, and access grants require separate authorization. The repository is the source of truth for project documents; changes go through branches and PRs, and delivery is a repository link, not an archive file. Others may not be able to read private links; when sharing this generic method with someone who lacks access, share a reviewed copy of this file or a clean file bundle instead. Granting a license/adding a license is the maintainer's decision; these instructions are not a license.
 
@@ -205,11 +210,11 @@ For multiple repositories, first establish whether they are mirrors sharing hist
 
 Merging requires explicit authorization, a project-approved strategy, and review first. Immediately before merging, reread remote head/base, PR status, current CI, valid independent review, source attribution, and applicable protections. Stop the action if anything does not comply. Fast-forward merging that preserves original commits is only an optional strategy; do not bypass PRs or protections for attribution.
 
-Besides merging, stop and wait for approval whenever any other stop point listed in section 4 comes up. For denials, protection failures, concurrent updates, unclear permissions, signature mismatches, unknown command side effects, or disclosure risks, report the exact target, reason, and smallest next step. Do not force-push, change protections to get through, or automatically switch accounts to bypass restrictions. If an outcome is uncertain, check status first to avoid duplicate pushes/PRs/deployments. Do not delete the branches of closed PRs; "clean up invalid PRs" means closing PRs that duplicate functionality, not deleting branches.
+Besides merging, stop and wait for approval whenever any other stop point listed in section 4 comes up. For denials, protection failures, concurrent updates, unclear permissions, signature mismatches, unknown command side effects, or disclosure risks, report the exact target, reason, and smallest next step. Do not force-push, change protections to get through, or automatically switch accounts to bypass restrictions. If an outcome is uncertain, check status first to avoid duplicate pushes/PRs/deployments. Do not delete branches without a user instruction. Do not delete the branches of closed PRs; "clean up invalid PRs" means closing PRs that duplicate functionality, not deleting branches. Log next-round items at the "Next-round log location" in the configuration table; if none is set, write them in comments on the relevant PR and in the handoff record, and do not change repository settings in order to log them. Interpret project-specific terms as the project defines them; if the meaning is unclear and would affect direction, confirm first. When the user must sign in or authorize in person, list the concrete steps immediately.
 
 After an authorized merge, reread the target branch and PR to confirm actual commits and status before reporting. Deployment and release still require separate authorization. Prefer rollback through a new revert change, subject to project checks and approval; do not rewrite history. If only part of the work can be completed, deliver existing patches, specs, evidence, and a list of unfinished items. Do not describe “prepared” work as “live.”
 
-## 10. Retrospectives and reporting (v2.1)
+## 10. Retrospectives and reporting (v2.2)
 
-- After each task, report the result and state whether there is a next step; the delivery record in section 4 can be used directly.
+- After each task, report the result and state whether there is a next step; the delivery record in section 4 can be used directly. When strengthened tests and independent review form one handoff, report once at the end of that round, and report earlier only if work gets stuck mid-round.
 - When a run goes badly or the user points out a problem, run a retrospective proactively: record the lesson in agent memory or a skill, and, if the project has adopted the workflow, update its change log through a branch and PR. Base the retrospective practice on official documentation and mature open-source projects.

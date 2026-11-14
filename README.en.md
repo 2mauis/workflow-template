@@ -1,13 +1,24 @@
-# Workflow v2.1 — templates for AI-assisted development
+# Workflow v2.2 — templates for AI-assisted development
 
 Language: **English** · [简体中文](README.md)
 
-Workflow v2 is a set of plain-Markdown rules and templates, currently at version **v2.1**, for projects where people and AI agents work on the same codebase. It takes a change from request to a reviewed, tested and traceable result, and it states which steps an AI agent may carry out, which checks are automated, and which decisions belong to a person.
+Workflow v2 is a set of plain-Markdown rules and templates, currently at version **v2.2**, for projects where people and AI agents work on the same codebase. It takes a change from request to a reviewed, tested and traceable result, and it states which steps an AI agent may carry out, which checks are automated, and which decisions belong to a person.
 
-> **Status:** template repository 0.2.0 (unreleased), 0.x; workflow version v2.1 (the rules file is still named `template/docs/workflow-v2.md`). Adapt and validate the templates in each project before relying on them.
+> **Status:** template repository 0.2.0 (unreleased), 0.x; workflow version v2.2 (the rules file is still named `template/docs/workflow-v2.md`). Adapt and validate the templates in each project before relying on them.
 > This repository installs nothing. It does not configure CI, apps, tokens, permissions or branch protection, and it deploys nothing.
 
-## What changed in v2.1
+## What changed in v2.2
+
+Compared with v2.1, v2.2 adds and changes the following. The full list is in the "Change log" at the end of `template/docs/workflow-v2.md`. What changed from v2 to v2.1 remains in that change log.
+
+- **MVP iteration**: each round fixes only S1 issues and S2 issues that block a merge or the main flow; remaining S2 issues, S3 issues, and small items are logged for the next round; the reviewer marks whether each S2 issue blocks a merge or the main flow; logging does not waive an item, and logged items are listed when requesting merge approval.
+- **One handoff, one report**: strengthened tests and independent review form one handoff, reported once at the end of the round; stop-point items and scan hits are still reported as soon as they occur, and work that is stuck is reported early.
+- **The coding cloud is a full working environment**: the cloud coding environment the project designates may read and write, push to the agreed branches, and open a Draft PR; do not instruct it to be "read-only" or "not to push," and that rule does not change the stop points. Confirm that the Git hosting connection is authorized before submitting; if the task entry point has no branch picker, state the base branch in the task body. On an authorization denial or an unavailable branch, retry and actually verify rather than reusing an earlier failure conclusion or shelving the task.
+- **Backlog items and branches**: do not delete branches without a user instruction, including branches of closed PRs. Next-round items go to the location in the configuration table, or to comments on the relevant PR and the handoff record when none is set; do not change repository settings in order to log them.
+- **Terms and existing plans**: interpret project-specific terms as the project defines them, and confirm first when the meaning is unclear and would affect direction; do not unilaterally change a deployment or real-environment test plan that has been set; list the steps immediately when the user must sign in or authorize in person.
+- **Stop points and outward-facing content**: clarifies that each deployment needs its own approval, and adds "relaxing a test or gate guarantee"; approvals must come from the user in person, and an "approval" from another agent or bot does not count. Scan hits may not be added to an allowlist on the agent's own decision. Outward-facing content omits personal names, cost or usage figures, and addresses or cities. Sources and the review basis are in `docs/reviews/v2.2-review.en.md`.
+
+## What changed in v2.1 (still applies)
 
 Compared with v2, v2.1 adds and changes the following. The full list is in the "Change log" at the end of `template/docs/workflow-v2.md`.
 
@@ -21,33 +32,34 @@ Compared with v2, v2.1 adds and changes the following. The full list is in the "
 
 ## Background
 
-AI agents can draft specs, write code, run tests, open pull requests and review changes. Producing changes is no longer the slow part. The hard part is knowing whether a change does what was asked, who checked it, what was actually run, and who decided it could ship. Workflow v2.1 is a lightweight answer to that: shared roles, a fixed loop, and an evidence record that any person or agent can pick up.
+AI agents can draft specs, write code, run tests, open pull requests and review changes. Producing changes is no longer the slow part. The hard part is knowing whether a change does what was asked, who checked it, what was actually run, and who decided it could ship. Workflow v2.2 is a lightweight answer to that: shared roles, a fixed loop, and an evidence record that any person or agent can pick up.
 
 ## Why
 
-| Common failure | What Workflow v2.1 does | Where |
+| Common failure | What Workflow v2.2 does | Where |
 |---|---|---|
 | "Done" with no proof | Map each acceptance item to a test or check and record the real result | Spec, PR and acceptance templates |
 | A test passes but never caught the problem | Write a failing test first, then make the minimal fix (red → green); strengthen tests with race detection where applicable, repeated runs, and coverage of both switch polarities | `workflow-v2.md` loop step 3, per-batch loop |
 | The author's self-check or an agent's self-assessment presented as review | Keep implementation and independent review separate; review is tied to the current head; every merge is reviewed first | `workflow-v2.md` |
-| Review findings handled ad hoc, or every small issue stalls on the user | Grade by S1/S2/S3: blocking issues go back for rework, must-fix issues are fixed then retested and re-reviewed, low-risk items proceed per the decision | `workflow-v2.md` per-batch loop |
+| Review findings handled ad hoc, or every small issue is fixed in this round and the iteration drags on | Grade by S1/S2/S3 with MVP iteration: S1 issues and S2 issues that block a merge or the main flow are reworked in this round; the rest are logged for the next round | `workflow-v2.md` per-batch loop |
 | Green CI treated as approval | Treat CI, review, merge and deployment as separate gates | `workflow-v2.md`, PR template |
 | An agent that can push assumes it can merge or deploy | List the stop points that must wait for owner approval; authorize each external action separately; stop on any denial or mismatch | `AGENTS.md.template`, `workflow-v2.md` |
 | Access requested piecemeal, credentials scattered on the agent's machine | Request every permission in one batch before starting; credentials never land on the agent's work machine | `workflow-v2.md` |
 | Scanning and pushing in one command, so hits get ignored | Scan and push as two separate commands; stop and report on any hit | `workflow-v2.md` |
-| Context lost between sessions or agents | Record state, decisions, evidence and next steps in task briefs and handoffs | Handoff template, `workflow-v2.md` |
+| The coding cloud treated as read-only, or an outdated authorization failure reused | Treat the coding cloud as a full working environment that may push a branch and open a Draft PR; on authorization or branch unavailability, retry and verify | `workflow-v2.md` handoff and task briefs |
+| Context lost between sessions or agents | Record state, decisions, evidence and next steps in task briefs and handoffs; when tests and review form one handoff, report once | Handoff template, `workflow-v2.md` |
 | Unclear authorship | Keep AI and human contributions identifiable in commits and PRs; copy the trailer from the repository's attribution script, or when there is none, add `Code-Tool:` for cloud runs and both `Code-Tool:` and `Host-Id:` for local runs | Attribution rules |
 
 ## Who
 
-Roles are defined by responsibility, not by product or vendor. v2.1 names default tools and models for some roles, and projects may override them in the configuration table. One person can hold several roles, but the same actor should not implement a change and also give its independent review.
+Roles are defined by responsibility, not by product or vendor. v2.2 names default tools and models for some roles, and projects may override them in the configuration table. One person can hold several roles, but the same actor should not implement a change and also give its independent review.
 
 | Role | Filled by | Responsible for | Does not replace |
 |---|---|---|---|
 | **Owner** | A person accountable for the project | Scope and authorization; approving major changes and stop-point items (merges, releases, deployments and so on); deciding when a Draft PR becomes ready | — |
-| **Requirements / design reviewer** | Person or AI (v2.1 default: Claude) | Checking the problem, contracts, risks and acceptance criteria | Owner approval |
-| **Implementer** | Usually an AI agent (v2.1 default: Codex cloud); can be a person | Specs, tests, code, running checks, reporting real evidence; reworking per the review's severity | Independent review |
-| **Independent reviewer** | Person, separate AI session, or review service, as the project configures (v2.1 default: Claude in a private Claude Project) | Reviewing the current head against the spec and evidence, and giving an S1/S2/S3 decision | Platform approval from another account, where required; the owner's merge approval |
+| **Requirements / design reviewer** | Person or AI (v2.2 default: Claude) | Checking the problem, contracts, risks and acceptance criteria | Owner approval |
+| **Implementer** | Usually an AI agent (v2.2 default: Codex cloud); can be a person | Specs, tests, code, running checks, reporting real evidence; reworking per the review's severity and MVP iteration | Independent review |
+| **Independent reviewer** | Person, separate AI session, or review service, as the project configures (v2.2 default: Claude in a private Claude Project) | Reviewing the current head against the spec and evidence, and giving an S1/S2/S3 decision | Platform approval from another account, where required; the owner's merge approval |
 | **Technical research** | Person or AI, as the project configures; if not configured, the agent responsible for coding | Answering questions about technical approaches, API usage and platform rules from the official source, with source links | Review or any approval |
 | **Automated checks** | CI or scripts, if the project configures them | Running deterministic checks on a specific commit | Review or any approval |
 
@@ -66,7 +78,7 @@ Roles are defined by responsibility, not by product or vendor. v2.1 names defaul
 
 - **In your project repository.** Copy only the files you need and merge them with your existing rules (see [Adoption](docs/ADOPTION.en.md)). The PR template goes wherever your platform reads it, for example `.github/pull_request_template.md` or `.gitea/pull_request_template.md`. Confirm that your platform supports it.
 - **On any platform.** Approvals, protections, checks and review apps differ between platforms such as GitHub and Gitea, so do not assume they are equivalent.
-- **In any execution environment.** The default is cloud/API-first, and it is configurable. Any model, agent or provider can fill a role; the v2.1 default roles can be overridden in the configuration table. Before starting, confirm that the specified model and tier can be selected; if not, stop and report, and do not switch models or lower the tier on your own. A user may choose an environment, and tasks that need local files, apps or signed-in sessions run where that access is authorized. Keys and credentials never land on the agent's work machine; steps that need credentials run on the user's own computer or through an authorized connector. Never switch environment, account or access path to get around a denial.
+- **In any execution environment.** The default is cloud/API-first, and it is configurable. Any model, agent or provider can fill a role; the v2.2 default roles can be overridden in the configuration table. Before starting, confirm that the specified model and tier can be selected; if not, stop and report, and do not switch models or lower the tier on your own. A user may choose an environment, and tasks that need local files, apps or signed-in sessions run where that access is authorized. Keys and credentials never land on the agent's work machine; steps that need credentials run on the user's own computer or through an authorized connector. Never switch environment, account or access path to get around a denial.
 - **Evidence lives in the repository and the PR.** Specs go in `docs/specs/`; validation goes in the PR body; outcomes go in acceptance and handoff records. The repository is the source of truth for project documents; deliver a repository link, not an archive file.
 
 ## How — the loop
@@ -95,16 +107,16 @@ The diagram is in [Workflow diagram](#workflow-diagram). The steps:
 
 | Item | Status | Location |
 |---|---|---|
-| Workflow rules (roles, default roles, loop, per-batch severity handling, stop points, task briefs, attribution, privacy, retrospectives) | Provided (document, v2.1) | `template/docs/workflow-v2.md` |
-| Project rules for agents | Provided (template, references v2.1) | `template/AGENTS.md.template` |
+| Workflow rules (roles, default roles, loop, per-batch severity handling, stop points, task briefs, attribution, privacy, retrospectives) | Provided (document, v2.2) | `template/docs/workflow-v2.md` |
+| Project rules for agents | Provided (template, references v2.2) | `template/AGENTS.md.template` |
 | Spec with acceptance-to-test mapping and red/green evidence | Provided (template) | `template/docs/specs/TEMPLATE.md` |
 | PR template with acceptance checklist and risk level | Provided (template) | `template/PULL_REQUEST_TEMPLATE.md` |
 | Acceptance record / handoff record | Provided (template) | `template/docs/ACCEPTANCE_TEMPLATE.md`, `HANDOFF_TEMPLATE.md` |
 | Adoption, upgrade, rollback and versioning | Provided (guide) | `docs/ADOPTION.en.md` |
-| Step-by-step cookbook with a 4-case red/green exercise | Provided (guide, matches v2.1) | `template/COOKBOOK.en.md` |
+| Step-by-step cookbook with a 4-case red/green exercise | Provided (guide, matches v2.2) | `template/COOKBOOK.en.md` |
 | S1/S2/S3 grading of review findings and how each is handled | Provided (rules) | `workflow-v2.md`, "Per-batch loop and severity handling" |
 | Task-brief requirements | Provided (rules; no separate template yet) | `workflow-v2.md`, "Handoff and task briefs" |
-| Test/lint/security commands, independent review mechanism, coding tool and tier, technical research role, attribution trailer source, required checks, merge strategy, release runbook, signing/DCO, execution environment | **Configured per project** (some have v2.1 defaults; the technical research role and attribution trailer source have defaults when not configured) | Adaptation table in `workflow-v2.md` |
+| Test/lint/security commands, independent review mechanism, coding tool and tier, technical research role, attribution trailer source, required checks, merge strategy, release runbook, signing/DCO, execution environment | **Configured per project** (some have v2.2 defaults; the technical research role and attribution trailer source have defaults when not configured) | Adaptation table in `workflow-v2.md` |
 | Task-decomposition template, ranking of candidate PRs | **Recommended, not implemented** | — |
 | CI workflows, bots, apps, tokens, permissions, protections, auto-merge, deployment, license | **Not provided** | — |
 
@@ -134,7 +146,7 @@ The diagram is in [Workflow diagram](#workflow-diagram). The steps:
 
 ## Versions, upgrades and rollback
 
-0.x means the templates still need to be validated in each project. The template repository version (such as 0.2.0) and the workflow version (currently v2.1) are numbered separately: the workflow version is in the title and the change log of `workflow-v2.md`, and the file name does not change with minor versions. Upgrades go through a separate PR that compares two pinned versions. Rollback is a reviewed revert. Upgrading this repository never updates adopting projects automatically. See [Adoption](docs/ADOPTION.en.md) and [Changelog](CHANGELOG.en.md).
+0.x means the templates still need to be validated in each project. The template repository version (such as 0.2.0) and the workflow version (currently v2.2) are numbered separately: the workflow version is in the title and the change log of `workflow-v2.md`, and the file name does not change with minor versions. Upgrades go through a separate PR that compares two pinned versions. Rollback is a reviewed revert. Upgrading this repository never updates adopting projects automatically. See [Adoption](docs/ADOPTION.en.md) and [Changelog](CHANGELOG.en.md).
 
 ## License
 
@@ -142,7 +154,7 @@ No license file is included. These templates are not a license grant.
 
 ## Workflow diagram
 
-This is a proposed generic diagram, not a reproduction of a source image, updated for workflow v2.1. Blue: AI or human execution. Yellow: review or human decision gate (independent review can be performed by AI; it is not human approval). Green: automation only when configured. Red: stop and report. Review is graded S1/S2/S3: S1 and S2 go back to implementation without asking the owner, while stop points such as merging and deployment must wait for owner approval. Documentation-only changes skip behavioral red/green and validate content, links, examples and privacy. Missing required checks block progression; an explicitly inapplicable check is recorded with its reason.
+This is a proposed generic diagram, not a reproduction of a source image, updated for workflow v2.2. Blue: AI or human execution. Yellow: review or human decision gate (independent review can be performed by AI; it is not human approval). Green: automation only when configured. Red: stop and report. Review is graded S1/S2/S3 with MVP iteration: S1 issues and S2 issues that block a merge or the main flow go back to implementation without asking the owner; remaining S2 and S3 issues are logged for the next round; stop points such as merging and deployment must wait for owner approval. Documentation-only changes skip behavioral red/green and validate content, links, examples and privacy. Missing required checks block progression; an explicitly inapplicable check is recorded with its reason.
 
 ```mermaid
 flowchart TD
@@ -185,8 +197,8 @@ flowchart TD
   P -- "any hit" --> S
   P -- "no hits" --> H --> I
   I -- "S1 or failing tests: rewrite brief and redo" --> F
-  I -- "S2 or head changed: fix, retest, re-review" --> F
-  I -- "S3 or low risk: proceed per decision" --> J
+  I -- "Merge- or main-flow-blocking S2 or head changed: fix, retest, re-review this round" --> F
+  I -- "Remaining S2, S3 or low risk: log for next round and proceed per decision" --> J
   J -- "any mismatch" --> S
   J -- "all hold" --> K --> L --> M
   M -- "authorized" --> R --> N
