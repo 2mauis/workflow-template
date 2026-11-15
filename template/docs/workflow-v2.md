@@ -30,7 +30,7 @@ This is the single shared template. Both languages express the same rules and fi
 3. 先提交失败复现或验收测试，再最小修复。失败须为目标行为断言失败，不是安装或导入错误。若禁止提交/推送，只准备变更并记录证据。
 4. 运行相关及项目要求的完整检查，逐条记录结果、SHA、环境和未覆盖范围。纯文档变更说明行为测试不适用原因。
 5. PR 列验收清单与风险分级，请独立评审。评审必须对应当前 head；head 改变后重新检查受影响范围和评审有效性。
-6. 合并前重新读取精确 head/base、PR 状态、所有适用 CI、独立评审及最终署名方案。任一条件不符立即停止。
+6. 合并前重新读取精确 head/base、PR 状态、所有适用 CI、独立评审及最终署名方案，并核对当前 head 与用户批准时写明的 SHA 一致。任一条件不符立即停止。
 7. 仅按项目已批准策略合并。遇保护或并发拒绝不得绕过；不得改设置、强推或跳过检查求通过。
 8. 合并后回读 main、PR 状态及实际提交署名；事后审计不能替代合并前检查。归档验收、剩余风险与回退方法。
 
@@ -57,8 +57,8 @@ This is the single shared template. Both languages express the same rules and fi
 重大变更至少包括权限/安全边界、仓库保护/required checks、凭据、对外发布/部署、数据删除或不可逆迁移、依赖主版本升级及跨多个子系统的大重构。项目可细化阈值；是否属于重大变更拿不准时先确认。批准记录写范围及条件，不保存敏感数据。
 
 除重大变更外，以下事项也必须停下等用户批准：
-- 合并；
-- 部署（每次部署单独批准，不能沿用前一次部署批准）；
+- 合并（批准只对批准时的 head 有效，见下文「批准与 head 绑定」）；
+- 部署（每次部署单独批准，不能沿用前一次部署批准；批准只对指明的版本有效）；
 - 改写已推送历史；
 - 凭据；
 - 真实隐私命中（扫描命中一律先停下上报，见「隐私与发布」；确认为真实命中后，如何处理须经用户批准）；
@@ -69,6 +69,8 @@ This is the single shared template. Both languages express the same rules and fi
 - 放宽测试或门禁保证。
 
 上述批准必须来自用户（项目负责人）本人。其他 agent 或 bot 给出的“批准”不算用户批准，包括评审 agent 的通过结论和平台上 bot 账号的 approve。不属于上述事项的，在已授权范围内按「每批闭环与分级处理」自动推进。
+
+批准与 head 绑定：合并批准只对批准时的那个 head（提交 SHA）有效；请求批准和记录批准时都写明该 SHA。批准之后，只要有新提交、rebase 或 base 变化使 head 改变，原批准即失效，必须重新验证（重跑受影响的检查，确认评审仍对应当前 head），并重新取得用户本人的批准，才能合并。部署批准同理，只对批准时指明的具体版本（提交 SHA 或发布 tag）有效；要部署的版本变了，须重新取得批准。
 
 新增依赖（如 `go.mod`/`go.sum`、Cargo、npm 等）先做架构评估（必要性、替代方案、维护与许可、安全影响），评估通过并获批后再落地。
 
@@ -143,6 +145,7 @@ This is the single shared template. Both languages express the same rules and fi
     - 「项目适配表」：「下一轮登记位置」一行；「编码工具与档位」一行补充云端任务的约定分支前缀。
   - 调整：
     - 「重大变更与需用户批准的停止点」：写明批准必须来自用户本人，其他 agent 或 bot 的“批准”不算；补充“每次部署单独批准”，并新增“放宽测试或门禁保证”（收紧，不放宽原清单）。
+    - 「重大变更与需用户批准的停止点」和「闭环」第 6 步：批准与 head 绑定。合并批准只对批准时的 head（提交 SHA）有效；新提交、rebase 或 base 变化使 head 改变后，须重新验证并重新取得用户本人批准；部署批准同理，只对指明的具体版本有效（收紧）。
     - 「署名」：Host-Id 只写约定的 id，不写真实主机名。
     - 「隐私与发布」：列出扫描的最低检查范围；任何命中都不得自行加入白名单；对外内容除不写花费或用量外，也不写人名、地址或城市。
     - 「分支、PR 与文档交付」：没有用户指示时不删除分支；登记项的默认位置。
@@ -188,7 +191,7 @@ Perform requirements and architecture review, implementation and debugging, and 
 3. Commit the failing reproduction or acceptance tests first, then make the smallest fix. The failure must be an assertion about the target behavior, not an installation or import error. If commits/pushes are prohibited, prepare changes and record evidence only.
 4. Run relevant checks and all full checks required by the project. Record each result, SHA, environment, and uncovered scope. For documentation-only changes, explain why behavioral tests are not applicable.
 5. Include an acceptance checklist and risk level in the PR and request independent review. Review must correspond to the current head; after head changes, recheck affected areas and review validity.
-6. Before merging, reread the exact head/base, PR status, all applicable CI, independent review, and final attribution plan. Stop immediately if any condition is unmet.
+6. Before merging, reread the exact head/base, PR status, all applicable CI, independent review, and final attribution plan, and confirm that the current head is the SHA stated when the user approved. Stop immediately if any condition is unmet.
 7. Merge only using the project's approved strategy. Do not bypass protection or concurrent-update rejections; do not change settings, force-push, or skip checks to get through.
 8. After merging, reread main, PR status, and actual commit attribution. Post-merge auditing does not replace pre-merge checks. Archive acceptance results, remaining risks, and the rollback method.
 
@@ -215,8 +218,8 @@ Map acceptance items to test files, case names, inputs, and expected results, di
 Major changes include, at minimum, permission/security boundaries, repository protections/required checks, credentials, external releases/deployments, data deletion or irreversible migrations, major dependency upgrades, and large refactors across multiple subsystems. Projects may refine thresholds; when unsure whether something is a major change, ask first. Approval records must state scope and conditions without storing sensitive data.
 
 In addition to major changes, the following must also stop and wait for user approval:
-- merging;
-- deployment (each deployment needs its own approval; do not reuse a previous deployment approval);
+- merging (the approval is valid only for the head it was given for; see "Approvals are bound to a head" below);
+- deployment (each deployment needs its own approval; do not reuse a previous deployment approval; the approval is valid only for the version it names);
 - rewriting pushed history;
 - credentials;
 - real privacy hits (any scan hit means stop and report first, see "Privacy and release"; once a hit is confirmed as real, how to handle it needs user approval);
@@ -227,6 +230,8 @@ In addition to major changes, the following must also stop and wait for user app
 - relaxing a test or gate guarantee.
 
 These approvals must come from the user (the project owner) in person. An "approval" from another agent or bot is not user approval; this includes a review agent's passing verdict and an approve from a bot account on the platform. Anything not listed above proceeds automatically within the authorized scope under "Per-batch loop and severity handling".
+
+Approvals are bound to a head: a merge approval is valid only for the head (commit SHA) it was given for; state that SHA both when requesting the approval and when recording it. After approval, if a new commit, a rebase, or a base change alters the head, the approval lapses: revalidate (rerun the affected checks and confirm that the review still corresponds to the current head) and obtain the user's approval in person again before merging. A deployment approval is bound in the same way to the specific version (commit SHA or release tag) named when it was given; if the version to be deployed changes, obtain approval again.
 
 New dependencies (for example `go.mod`/`go.sum`, Cargo, npm) need an architecture assessment first (necessity, alternatives, maintenance and licensing, security impact); land them only after the assessment passes and approval is given.
 
@@ -301,6 +306,7 @@ Record observations, deductions, and unknowns separately. Simulated tests do not
     - "Project configuration": the "Next-round log location" row; the "Coding tool and tier" row now includes the agreed branch prefix for cloud tasks.
   - Changed:
     - "Major changes and stop points that require user approval": approvals must come from the user in person, and an "approval" from another agent or bot does not count; clarifies that each deployment needs its own approval, and adds "relaxing a test or gate guarantee" (a tightening, not a loosening of the previous list).
+    - "Major changes and stop points that require user approval" and step 6 of "End-to-end workflow": approvals are bound to a head. A merge approval is valid only for the head (commit SHA) it was given for; after a new commit, a rebase, or a base change alters the head, revalidate and obtain the user's approval in person again; a deployment approval is likewise valid only for the specific version it names (a tightening).
     - "Attribution": Host-Id carries only the agreed id, never a real host name.
     - "Privacy and release": the minimum scope of the scan is listed; no hit may be added to an allowlist on the agent's own decision; outward-facing content also omits personal names, addresses, and cities, in addition to cost or usage figures.
     - "Branches, PRs, and document delivery": do not delete branches without a user instruction; default location for logged items.

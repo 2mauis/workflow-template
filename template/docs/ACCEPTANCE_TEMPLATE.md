@@ -16,7 +16,7 @@ This is the single shared template. Both languages express the same rules and fi
 #### 评审与门禁
 - 独立评审及对应 SHA：<EVIDENCE>
 - 适用 CI 与结果：<EVIDENCE>
-- 批准与范围：<EVIDENCE>
+- 批准与范围（含合并批准对应的 head SHA、部署批准对应的版本）：<EVIDENCE>
 - 合并前后 SHA/PR 状态/署名：<EVIDENCE_OR_NOT_MERGED>
 
 #### 限制与后续
@@ -34,7 +34,7 @@ Date/time zone: <DATE>. Target commit: <SHA>. Environment: <ENVIRONMENT>.
 #### Reviews and gates
 - Independent review and corresponding SHA: <EVIDENCE>
 - Applicable CI and results: <EVIDENCE>
-- Approvals and scope: <EVIDENCE>
+- Approvals and scope (including the head SHA a merge approval was given for and the version a deployment approval was given for): <EVIDENCE>
 - Pre-/post-merge SHA/PR status/attribution: <EVIDENCE_OR_NOT_MERGED>
 
 #### Limitations and follow-up
