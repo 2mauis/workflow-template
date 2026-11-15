@@ -52,7 +52,7 @@ Not verified (and therefore not written into this document, or written as projec
 - **Flow**: user → chief → specialist (one complete handoff) → specialist returns the finished work to the chief → chief accepts it → delivery to the user. Specialists do not bypass the chief to deliver.
 - **One owner per stage**: the same piece of work is not routed to several specialists in parallel (consistent with the official advice in G2).
 - **Chief acceptance is neither independent review nor user approval**: the chief's acceptance is a pre-delivery check (evidence, source links, privacy, fit to the deliverable); independent review of code changes is done by the review role in section 1.2; stop points are approved by the user in person.
-- Documents, handoff messages, and deliveries use role names only, never real personal names or internal bot ids.
+- Documents, handoff messages, and deliveries use role names only, never real individuals' names or internal bot ids.
 
 ### 1.2 Coding split
 - **Implementation**: the cloud coding agent the project designates (workflow default: Codex cloud). It is a full working environment: it implements on the agreed branches and, once pushing and opening a PR are authorized, pushes the agreed branch and opens a Draft PR (see section 5).
@@ -280,7 +280,7 @@ Authors/trailers are provenance declarations, not cryptographic signatures. The 
 
 Share reusable methods, not private context. Export using an explicit file allowlist. Have a human review each file and scan for secrets, real email addresses, account identifiers, internal network addresses, device paths, private logs, and raw chats. Allow example placeholders only; do not embed private project links. Scanning is an aid, not a safety guarantee. Handoff messages between bots follow the same standard: role names and placeholders only.
 
-Run privacy and credential checks before every push and release; scan and push as two separate commands, stop and report on any hit (including one you believe is a false positive), and do not add it to an allowlist, ignore rule, or baseline on your own (the scope of the check is in section 7). Commit messages, PRs, and other outward-facing content do not include personal names, spending or usage figures, or addresses or cities.
+Run privacy and credential checks before every push and release; scan and push as two separate commands, stop and report on any hit (including one you believe is a false positive), and do not add it to an allowlist, ignore rule, or baseline on your own (the scope of the check is in section 7). Commit messages, PRs, and other outward-facing content do not mention expense-related information or individuals' names, and omit usage figures, addresses, and cities.
 
 If the source repository contains private material, use a clean export with fresh history. Do not directly push --mirror, copy .git, or make the entire repository public. Public visibility, invitations, and access grants require separate authorization. The repository is the source of truth for project documents; changes go through branches and PRs, and delivery is a repository link, not an archive file. Others may not be able to read private links; when sharing this generic method with someone who lacks access, share a reviewed copy of this file or a clean file bundle instead. Granting a license/adding a license is the maintainer's decision; these instructions are not a license.
 

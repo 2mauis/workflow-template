@@ -105,7 +105,7 @@ This is the single shared template. Both languages express the same rules and fi
 - 检查范围至少包括个人信息、主机名、内网域名、邮箱（noreply 和文档保留域名除外）、IP、token 和密钥，并覆盖待推送的改动、提交说明和 PR 正文。
 - 扫描有任何命中（包括认为是误报的），都先停下上报，不得自行判断后推送，也不得自行把命中加入白名单、忽略规则或基线。
 
-提交信息、PR 正文和其他对外内容不写人名、花费或用量、地址或城市；Git author/committer 元数据按「署名」如实保留。
+提交信息、PR 正文和其他对外内容不提及开销类信息和个人姓名，也不写用量、地址或城市；Git author/committer 元数据按「署名」如实保留。
 
 #### 分支、PR 与文档交付
 - 没有用户指示时不删除分支。已关闭 PR 的分支不删除。「清理无效 PR」指关闭功能重复的 PR，不指删除分支。
@@ -147,7 +147,7 @@ This is the single shared template. Both languages express the same rules and fi
     - 「重大变更与需用户批准的停止点」：写明批准必须来自用户本人，其他 agent 或 bot 的“批准”不算；补充“每次部署单独批准”，并新增“放宽测试或门禁保证”（收紧，不放宽原清单）。
     - 「重大变更与需用户批准的停止点」和「闭环」第 6 步：批准与 head 绑定。合并批准只对批准时的 head（提交 SHA）有效；新提交、rebase 或 base 变化使 head 改变后，须重新验证并重新取得用户本人批准；部署批准同理，只对指明的具体版本有效（收紧）。
     - 「署名」：Host-Id 只写约定的 id，不写真实主机名。
-    - 「隐私与发布」：列出扫描的最低检查范围；任何命中都不得自行加入白名单；对外内容除不写花费或用量外，也不写人名、地址或城市。
+    - 「隐私与发布」：列出扫描的最低检查范围；任何命中都不得自行加入白名单；对外内容不提及开销类信息和个人姓名，也不写用量、地址或城市。
     - 「分支、PR 与文档交付」：没有用户指示时不删除分支；登记项的默认位置。
 - 2026-11-12 — v2.1
   - 新增：
@@ -156,7 +156,7 @@ This is the single shared template. Both languages express the same rules and fi
     - 「每批闭环与分级处理」「交接与任务书」「分支、PR 与文档交付」「复盘与自动学习」四节。
     - 「环境与已有授权」：开工前集中授权；密钥与凭据不落 agent 工作机。
     - 「署名」：项目没有署名脚本或策略文件时，按编码 agent 的运行环境加来源 trailer：云端运行只写工具标识（如 `Code-Tool: codex <模型> <档位>`），不写 Host-Id；本地电脑运行写同样的工具标识并加 `Host-Id: <host-id>`。文档只用占位符，并提示本地运行时 host id 会出现在公开的提交记录里（负责人决定）。
-    - 「隐私与发布」：扫描与推送分两条命令；任何命中先停下上报；提交与 PR 不写花费或用量。
+    - 「隐私与发布」：扫描与推送分两条命令；任何命中先停下上报；提交与 PR 不提及开销类信息，也不写用量。
     - 「项目适配表」：编码工具与档位、技术研究角色、署名 trailer 来源三行，后两行写明项目没有配置时的默认做法。
   - 调整：
     - 原「重大变更」一节改为「重大变更与需用户批准的停止点」，新增停止点清单、新增依赖的架构评估、每次合并评审在先，以及 Draft PR 由人决定转 ready 和合并。
@@ -266,7 +266,7 @@ Run privacy and credential checks before every push and release:
 - The check covers at least personal information, host names, internal domains, email addresses (except noreply and documentation-reserved domains), IP addresses, tokens, and keys, across the changes to be pushed, the commit messages, and the PR body.
 - If the scan reports any hit (including one you believe is a false positive), stop and report it first; do not decide on your own and push, and do not add the hit to an allowlist, ignore rule, or baseline on your own.
 
-Commit messages, PR bodies, and other outward-facing content do not include personal names, cost or usage figures, or addresses or cities; Git author/committer metadata is preserved truthfully under "Attribution".
+Commit messages, PR bodies, and other outward-facing content do not mention expense-related information or individuals' names, and omit usage figures, addresses, and cities; Git author/committer metadata is preserved truthfully under "Attribution".
 
 #### Branches, PRs, and document delivery
 - Do not delete branches without a user instruction. Do not delete the branches of closed PRs. "Clean up invalid PRs" means closing PRs that duplicate functionality, not deleting branches.
@@ -308,7 +308,7 @@ Record observations, deductions, and unknowns separately. Simulated tests do not
     - "Major changes and stop points that require user approval": approvals must come from the user in person, and an "approval" from another agent or bot does not count; clarifies that each deployment needs its own approval, and adds "relaxing a test or gate guarantee" (a tightening, not a loosening of the previous list).
     - "Major changes and stop points that require user approval" and step 6 of "End-to-end workflow": approvals are bound to a head. A merge approval is valid only for the head (commit SHA) it was given for; after a new commit, a rebase, or a base change alters the head, revalidate and obtain the user's approval in person again; a deployment approval is likewise valid only for the specific version it names (a tightening).
     - "Attribution": Host-Id carries only the agreed id, never a real host name.
-    - "Privacy and release": the minimum scope of the scan is listed; no hit may be added to an allowlist on the agent's own decision; outward-facing content also omits personal names, addresses, and cities, in addition to cost or usage figures.
+    - "Privacy and release": the minimum scope of the scan is listed; no hit may be added to an allowlist on the agent's own decision; outward-facing content does not mention expense-related information or individuals' names, and omits usage figures, addresses, and cities.
     - "Branches, PRs, and document delivery": do not delete branches without a user instruction; default location for logged items.
 - 2026-11-12 — v2.1
   - Added:
@@ -317,7 +317,7 @@ Record observations, deductions, and unknowns separately. Simulated tests do not
     - Four sections: "Per-batch loop and severity handling", "Handoff and task briefs", "Branches, PRs, and document delivery", and "Retrospectives and continuous learning".
     - "Environment and existing access": one-batch authorization before starting; keys and credentials never land on the agent's work machine.
     - "Attribution": if the project has no attribution script or policy file, add source trailers depending on where the coding agent runs: in the cloud, only the tool identifier (such as `Code-Tool: codex <model> <tier>`), with no Host-Id; on a local computer, the same tool identifier plus `Host-Id: <host-id>`. Documents use only placeholders, with a note that for local runs the host id appears in the public commit history (owner's decision).
-    - "Privacy and release": separate scan and push commands; stop and report on any hit; no cost or usage figures in commits and PRs.
+    - "Privacy and release": separate scan and push commands; stop and report on any hit; commits and PRs do not mention expense-related information and omit usage figures.
     - "Project configuration": three rows for coding tool and tier, technical research role, and attribution trailer source; the last two state the default when the project has not configured them.
   - Changed:
     - The former "Major changes" section is now "Major changes and stop points that require user approval", adding the list of stop points, the architecture assessment for new dependencies, review before every merge, and a person deciding when a Draft PR becomes ready and whether it is merged.
