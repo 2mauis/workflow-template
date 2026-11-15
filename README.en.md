@@ -4,7 +4,8 @@ Language: **English** · [简体中文](README.md)
 
 Workflow v2 is a set of plain-Markdown rules and templates, currently at version **v2.2**, for projects where people and AI agents work on the same codebase. It takes a change from request to a reviewed, tested and traceable result, and it states which steps an AI agent may carry out, which checks are automated, and which decisions belong to a person.
 
-> **Status:** template repository 0.2.0 (unreleased), 0.x; workflow version v2.2 (the rules file is still named `template/docs/workflow-v2.md`). Adapt and validate the templates in each project before relying on them.
+> **Status:** template repository 2.2.2 (unreleased); workflow version v2.2 (the rules file is still named `template/docs/workflow-v2.md`). Adapt and validate the templates in each project before relying on them.
+> **Cookbooks:** pick the one that matches the implementer — [for Dot](docs/cookbook-dot.en.md) · [for Grok Bot](docs/cookbook-grok-bot.en.md).
 > This repository installs nothing. It does not configure CI, apps, tokens, permissions or branch protection, and it deploys nothing.
 
 ## What changed in v2.2
@@ -115,7 +116,9 @@ The diagram is in [Workflow diagram](#workflow-diagram). The steps:
 | PR template with acceptance checklist, risk level, items logged for the next round, and the head SHA an approval covers | Provided (template) | `template/PULL_REQUEST_TEMPLATE.md` |
 | Acceptance record / handoff record | Provided (template) | `template/docs/ACCEPTANCE_TEMPLATE.md`, `HANDOFF_TEMPLATE.md` |
 | Adoption, upgrade, rollback and versioning | Provided (guide) | `docs/ADOPTION.en.md` |
-| Step-by-step cookbook with a 4-case red/green exercise | Provided (guide, matches v2.2) | `template/COOKBOOK.en.md` |
+| Step-by-step cookbook for Dot (with Dot capabilities verified against official sources) and a 4-case red/green exercise | Provided (guide, matches v2.2) | [`docs/cookbook-dot.en.md`](docs/cookbook-dot.en.md) |
+| Step-by-step cookbook for Grok Bot (chief and specialist bot routing, coding split, with Grok Bot capabilities verified against official sources) and a 4-case red/green exercise | Provided (guide, matches v2.2) | [`docs/cookbook-grok-bot.en.md`](docs/cookbook-grok-bot.en.md) |
+| Former cookbook location | Kept only as a short pointer to the two above; no workflow content; not copied into projects | `template/COOKBOOK.en.md` |
 | S1/S2/S3 grading of review findings and how each is handled | Provided (rules) | `workflow-v2.md`, "Per-batch loop and severity handling" |
 | Task-brief requirements | Provided (rules; no separate template yet) | `workflow-v2.md`, "Handoff and task briefs" |
 | Test/lint/security commands, independent review mechanism, coding tool and tier, technical research role, attribution trailer source, next-round log location, required checks, merge strategy, release runbook, signing/DCO, execution environment | **Configured per project** (some have v2.2 defaults; the technical research role, attribution trailer source, and next-round log location have defaults when not configured) | Configuration table in `workflow-v2.md` ("Project configuration") |
@@ -146,12 +149,12 @@ The diagram is in [Workflow diagram](#workflow-diagram). The steps:
 1. Pin a version: a verified tag plus its full commit, or a full commit if there is no tag.
 2. Copy the templates you need into your project and merge them with existing rules.
 3. Fill in the configuration table: commands, reviewer, coding tool and tier, technical research role, attribution trailer source, next-round log location, required checks, merge strategy, release boundary. Override the default roles in the table if you do not use them. If the technical research role, attribution trailer source, or next-round log location is not configured, use the workflow's defaults; write "not configured" for anything else that does not exist.
-4. Run one small task through the loop, or start with the cookbook exercise.
+4. Run one small task through the loop, or start with the cookbook exercise ([for Dot](docs/cookbook-dot.en.md) or [for Grok Bot](docs/cookbook-grok-bot.en.md)).
 5. Adopt the templates through your project's own review. Copying files does not activate any gate.
 
 ## Versions, upgrades and rollback
 
-0.x means the templates still need to be validated in each project. The template repository version (such as 0.2.0) and the workflow version (currently v2.2) are numbered separately: the workflow version is in the title and the change log of `workflow-v2.md`, and the file name does not change with minor versions. Upgrades go through a separate PR that compares two pinned versions. Rollback is a reviewed revert. Upgrading this repository never updates adopting projects automatically. See [Adoption](docs/ADOPTION.en.md) and [Changelog](CHANGELOG.en.md).
+The version number does not mean the templates are stable; they still need to be validated in each project. The template repository version (currently 2.2.2) and the workflow version (currently v2.2) are recorded separately: starting with 2.2.2, the major and minor numbers of the template repository version match the workflow version it ships, and the patch number marks revisions of the template repository itself (the earlier 0.1.0 and 0.2.0 followed the former 0.x convention); the workflow version is in the title and the change log of `workflow-v2.md`, and the file name does not change with minor versions. Upgrades go through a separate PR that compares two pinned versions. Rollback is a reviewed revert. Upgrading this repository never updates adopting projects automatically. See [Adoption](docs/ADOPTION.en.md) and [Changelog](CHANGELOG.en.md).
 
 ## License
 

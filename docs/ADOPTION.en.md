@@ -1,6 +1,6 @@
 # Adoption and upgrades
 
-Start with the [standalone Cookbook you can hand to dot](../template/COOKBOOK.en.md). If you only want to start a task, you do not need to install every template first.
+Start with the standalone Cookbook that matches the implementer: [for Dot](cookbook-dot.en.md) or [for Grok Bot](cookbook-grok-bot.en.md). If you only want to start a task, you do not need to install every template first. A Cookbook is a set of instructions shared with the implementer; it is not in `template/` and is not copied into projects. `template/COOKBOOK.en.md` remains only as a short pointer to the two.
 
 The Chinese and English adoption guides both point to the same set of bilingual shared templates in `template/`. Each field has exactly one meaning and value; keep the two languages consistent, and do not adopt two sets of rules.
 
@@ -48,7 +48,11 @@ When upgrading from v2.1 to v2.2, also check the following:
 - Whether the PR template the project already adopted has the "Logged for the next round" line and the line for the head SHA an approval covers, and states under "Release and deployment" that each deployment is approved separately and which version the approval covers; whether "Approvals and scope" in the acceptance record notes the head SHA or version an approval covers.
 - Whether the practices that the [v2.2 review](reviews/v2.2-review.en.md) logs but does not adopt have been read; adopting any of them changes a gate and needs separate approval from the user.
 
-## Versioning
-0.x means the templates still need to be adapted and validated in each project. Patch versions fix wording; minor versions add compatible templates; incompatible process changes bump the major version once a stable version exists. Released versions come with a CHANGELOG entry and a Git tag; unreleased changes under development are recorded as Unreleased and are not described as released ahead of time.
+When upgrading from template repository 0.2.0 to 2.2.2: the rules and shared templates are unchanged, the workflow version is still v2.2, and the project's configuration table does not need to change because of it. Also check the following:
+- If project documents, handoff records, or shared links point to `template/COOKBOOK.md` or `template/COOKBOOK.en.md`, point them to `docs/cookbook-dot.en.md` or `docs/cookbook-grok-bot.en.md` (or the Chinese versions) instead; the old paths hold only a pointer, with no workflow content.
+- Record the template source version as 2.2.2 with the full commit; the change to the versioning convention is described under "Versioning" below.
 
-The template repository version (such as 0.2.0) and the workflow version (such as v2.2) are numbered separately: the former identifies a release of the whole template set, the latter the workflow rules themselves, recorded in the title and change log of `workflow-v2.md`.
+## Versioning
+The version number does not mean the templates are stable; they still need to be adapted and validated in each project. Starting with 2.2.2 (the owner's decision), the major and minor numbers of the template repository version match the workflow version it ships (2.2.x ships workflow v2.2), and the patch number marks revisions of the template repository itself, such as changes to wording, companion documents, and file locations, without changing the rules; when the workflow version rises, the template repository's major and minor numbers follow. The earlier 0.1.0 and 0.2.0 followed the former 0.x convention and stay in the changelog. Released versions come with a CHANGELOG entry and a Git tag; unreleased changes under development are recorded as Unreleased and are not described as released ahead of time.
+
+The template repository version (such as 2.2.2) and the workflow version (such as v2.2) are recorded separately: the former identifies a release of the whole template set, the latter the workflow rules themselves, recorded in the title and change log of `workflow-v2.md`. When the rules are unchanged, only the template repository's patch number rises, and the workflow version stays the same.

@@ -4,7 +4,8 @@
 
 Workflow v2 是一组纯 Markdown 的规则和模板，当前版本为 **v2.2**，适用于人和 AI agent 在同一代码库协作的项目。它把一次修改从需求带到“经过评审、测试、可追溯”的结果，并写清楚：哪些步骤可以由 AI agent 执行，哪些检查是自动化的，哪些决定必须由人做出。
 
-> **状态：** 模板仓 0.2.0（未发布），0.x；workflow 版本 v2.2（规则文件名仍为 `template/docs/workflow-v2.md`）。依赖这些模板之前，需要先在各项目中适配和验证。
+> **状态：** 模板仓 2.2.2（未发布）；workflow 版本 v2.2（规则文件名仍为 `template/docs/workflow-v2.md`）。依赖这些模板之前，需要先在各项目中适配和验证。
+> **Cookbook：** 按执行者选一份——[给 Dot](docs/cookbook-dot.md) · [给 Grok Bot](docs/cookbook-grok-bot.md)。
 > 本仓库不安装任何东西，不配置 CI、App、token、权限或分支保护，也不部署任何东西。
 
 ## v2.2 改动摘要
@@ -115,7 +116,9 @@ AI agent 已经能写规格、写代码、跑测试、开 PR、评审改动。�
 | 含验收清单、风险等级、下一轮登记项和批准对应 head SHA 的 PR 模板 | 已提供（模板） | `template/PULL_REQUEST_TEMPLATE.md` |
 | 验收记录 / 交接记录 | 已提供（模板） | `template/docs/ACCEPTANCE_TEMPLATE.md`、`HANDOFF_TEMPLATE.md` |
 | 采用、升级、回退与版本约定 | 已提供（指南） | `docs/ADOPTION.md` |
-| 分步 Cookbook 与 4 用例红绿演练 | 已提供（指南，对应 v2.2） | `template/COOKBOOK.md` |
+| 给 Dot 的分步 Cookbook（附官方来源核实的 Dot 能力）与 4 用例红绿演练 | 已提供（指南，对应 v2.2） | [`docs/cookbook-dot.md`](docs/cookbook-dot.md) |
+| 给 Grok Bot 的分步 Cookbook（总管与专家 bot 路由、编码分工，附官方来源核实的 Grok Bot 能力）与 4 用例红绿演练 | 已提供（指南，对应 v2.2） | [`docs/cookbook-grok-bot.md`](docs/cookbook-grok-bot.md) |
+| 旧 Cookbook 位置 | 仅保留为指向上面两份的短指针，不含流程内容，不复制进项目 | `template/COOKBOOK.md` |
 | 评审发现的 S1/S2/S3 分级与处理方式 | 已提供（规则） | `workflow-v2.md`「每批闭环与分级处理」 |
 | 任务书要求 | 已提供（规则；尚无独立模板） | `workflow-v2.md`「交接与任务书」 |
 | 测试/lint/安全命令、独立评审方式、编码工具与档位、技术研究角色、署名 trailer 来源、下一轮登记位置、required checks、合并策略、发布手册、签名/DCO、执行环境 | **按项目配置**（部分有 v2.2 默认值；技术研究角色、署名 trailer 来源和下一轮登记位置没有配置时有默认做法） | `workflow-v2.md` 中的项目适配表 |
@@ -146,12 +149,12 @@ AI agent 已经能写规格、写代码、跑测试、开 PR、评审改动。�
 1. 固定版本：已核验的 tag 加完整 commit；没有 tag 时用完整 commit。
 2. 把需要的模板复制到项目，并与已有规则合并。
 3. 填写项目适配表：命令、评审者、编码工具与档位、技术研究角色、署名 trailer 来源、下一轮登记位置、required checks、合并策略、发布边界。不使用默认分工时在表中覆盖。技术研究角色、署名 trailer 来源和下一轮登记位置没有配置时按 workflow 的默认做法填写；其余不存在的项写“未配置”。
-4. 用一个小任务跑一遍闭环，或先做 Cookbook 里的演练。
+4. 用一个小任务跑一遍闭环，或先做 Cookbook 里的演练（[给 Dot](docs/cookbook-dot.md) 或 [给 Grok Bot](docs/cookbook-grok-bot.md)）。
 5. 通过项目自己的评审来采用模板。只复制文件不会让任何门禁生效。
 
 ## 版本、升级与回退
 
-0.x 表示模板仍需在各项目中验证。模板仓版本（如 0.2.0）与 workflow 版本（当前 v2.2）分开编号：workflow 版本写在 `workflow-v2.md` 的标题和文末变更记录中，文件名不随小版本变化。升级通过单独的 PR 进行，对比两个固定版本。回退用经过评审的 revert。更新本仓库不会自动更新已采用它的项目。详见[采用指南](docs/ADOPTION.md)和[变更记录](CHANGELOG.md)。
+版本号不表示模板已经稳定，模板仍需在各项目中验证。模板仓版本（当前 2.2.2）与 workflow 版本（当前 v2.2）分开记录：从 2.2.2 起，模板仓版本的主、次号与所对应的 workflow 版本一致，补丁号标识模板仓自身的修订（此前的 0.1.0、0.2.0 按原 0.x 约定编号）；workflow 版本写在 `workflow-v2.md` 的标题和文末变更记录中，文件名不随小版本变化。升级通过单独的 PR 进行，对比两个固定版本。回退用经过评审的 revert。更新本仓库不会自动更新已采用它的项目。详见[采用指南](docs/ADOPTION.md)和[变更记录](CHANGELOG.md)。
 
 ## 许可证
 
