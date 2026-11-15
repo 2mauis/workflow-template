@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.2 — Unreleased
+## 2.2.2 — 2026-11-15
 - The workflow version is still v2.2: the rules in `template/docs/workflow-v2.md`, the AGENTS template, and the other shared templates are unchanged, and the version title of the rules file stays the same.
 - Splits the Cookbook into two, under this repository's `docs/` (not `template/`), each in Chinese and English:
   - For Dot: `docs/cookbook-dot.md` and `docs/cookbook-dot.en.md`. A new section 0, "Verified Dot capabilities," links every item to official OpenAI documentation (verified on 2026-11-15); the official announcement page returned 403 to automated fetching and is marked not verified, and details from third-party reports are left out.
@@ -19,7 +19,7 @@
   - Adds the "Terms, plans, and communication" section: interpret project-specific terms as the project defines them and confirm first when the meaning is unclear and would affect direction; do not unilaterally change a deployment or real-environment test plan that has been set; list the steps immediately when the user must sign in or authorize in person.
   - Stop points clarify that each deployment needs its own approval, and add "relaxing a test or gate guarantee"; approvals must come from the user in person, and an "approval" from another agent or bot does not count.
   - Approvals are bound to a head: a merge approval is valid only for the head (commit SHA) it was given for; after a new commit, a rebase, or a base change alters the head, revalidate and obtain the user's approval in person again; a deployment approval is likewise valid only for the specific version it names.
-  - The minimum scope of the scan is listed; no hit may be added to an allowlist on the agent's own decision. Outward-facing content omits personal names, cost or usage figures, and addresses or cities. Host-Id carries only the agreed id, never a real host name.
+  - The minimum scope of the scan is listed; no hit may be added to an allowlist on the agent's own decision. Outward-facing content does not mention expense-related information or individuals' names, and omits usage figures, addresses, and cities. Host-Id carries only the agreed id, never a real host name.
   - Sources and the review basis are in `docs/reviews/v2.2-review.md` (English: `docs/reviews/v2.2-review.en.md`).
 - Updates the AGENTS template, README (Chinese and English), Cookbook (Chinese and English), and adoption guide (Chinese and English) to v2.2, and adds upgrade checks from v2.1 to v2.2.
 - Revisions after the v2.2 review (the rules change only for S2-10, which binds approvals to a head; IDs refer to `docs/reviews/v2.2-review.en.md`):
