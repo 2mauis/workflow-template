@@ -78,7 +78,7 @@ This is the single shared template. Both languages express the same rules and fi
 
 #### 交接与任务书
 - 任务书写明：基点 commit、分支名、Draft PR 目标分支、提交顺序（先改规格 → 先红的测试 → 实现）、硬约束、验收标准和署名 trailer。
-- 署名 trailer 照抄仓库署名脚本或策略文件原文（见适配表「署名 trailer 来源」），不凭记忆书写；项目没有署名脚本或策略文件时，按「署名」中的来源 trailer 规则填写（云端运行只写 `Code-Tool`，本地电脑运行写 `Code-Tool` 并加 `Host-Id`）。
+- 署名 trailer 照抄仓库署名脚本或策略文件原文（见适配表「署名 trailer 来源」），不凭记忆书写；项目没有署名脚本或策略文件时，按「署名」中的来源 trailer 规则填写。
 - 给编码工具的输入框只粘贴任务书正文，不夹带对话或说明；发送前截图核对。
 - 项目指定的云端编码环境（默认见「默认分工」）是完整工作环境：可以读写、向约定分支推送（分支前缀见适配表，默认 `codex/*`）、开 Draft PR。不要给它下“只读”或“不推送”的指令，除非用户在该任务中明确收窄权限。取回改动时，优先让它推送约定分支并开 Draft PR。这只覆盖约定分支和 Draft PR，不改变停止点：合并、部署、改写已推送历史、政策文件等仍按「重大变更与需用户批准的停止点」停下等批准。
 - 提交云端任务前核对：环境是云端而不是本地，模型与档位正确，且该环境的 Git 托管连接已授权本仓库（实际查看连接状态，确认能看到本仓库和目标分支）。任务入口没有分支选择器时（例如网页任务），把 base 分支写在任务正文里。提交后必须有人跟到任务完成，并主动汇报结果。
@@ -87,11 +87,7 @@ This is the single shared template. Both languages express the same rules and fi
 #### 署名
 先用只读检查核实目标仓库已有授权和当前工具能力；命令行未登录不等于连接器无权访问，不应因此要求重复授权。Git author/committer 元数据须如实保留和披露，不伪装身份；工具支持且项目允许时使用可识别的 AI 作者名称。若工具不能指定 AI author，且项目规则允许，可保留工具实际设置的连接账户身份，在提交信息明确写明 AI authored 并加 `Agent: <实际来源标识>`，在 PR 披露 AI 来源、实际 author/committer 及工具限制，不宣称作者字段已经设为 AI。若项目强制 AI 作者名称、DCO 或特定签名且当前路径无法满足，停止相关提交/发布并请示，不绕过、不擅自改规则或创建凭据。trailer 的具体键名与格式以项目仓库的署名脚本或策略文件原文为准。
 
-项目没有署名脚本或策略文件时，在其他 trailer（如 `Agent: <实际来源标识>`）之外，按编码 agent 的运行环境加来源 trailer：
-- 在云端环境运行时（例如 Codex 云端）：只写工具本身的标识，例如 `Code-Tool: codex <模型> <档位>`，不写 Host-Id。
-- 在本地电脑上运行时：同样写 `Code-Tool: codex <模型> <档位>`，并加 `Host-Id: <host-id>`；Host-Id 只写为该电脑约定的 id，不写真实主机名。两行都写，不能只写 Host-Id。
-
-文档、示例和任务书模板只用占位符，不写任何真实主机名。注意：在本地电脑上运行时采用这条，host id 会出现在公开的提交记录里。
+项目没有署名脚本或策略文件时，云端和本地运行均添加 `Code-Tool: <工具> <模型> <档位>`，与 `Agent: <实际来源标识>` 等其他 trailer 一起记录。
 
 人工提交使用本人选择姓名、邮箱及 `Agent: human`；人工批准不改变 AI 实作来源。不以邮箱域名判定 AI，不强制人工 noreply，不擅自修改全局身份或账号隐私设置，不在文档/PR 正文复制真实邮箱。
 
@@ -127,7 +123,7 @@ This is the single shared template. Both languages express the same rules and fi
 - 独立评审机制：<REVIEWER_OR_SERVICE>（默认 Claude，Opus 5.5 High，私有 Claude Project）
 - 编码工具与档位：<CODING_TOOL_AND_TIER>（默认 Codex 云端，GPT-6.1 Sol，Extra High；云端任务的约定分支前缀默认 `codex/*`）
 - 技术研究角色：<RESEARCH_ROLE>（项目没有配置时：由负责编程的 agent 自己查官方文档并附来源链接）
-- 署名 trailer 来源：<ATTRIBUTION_SCRIPT_OR_POLICY>（项目没有署名脚本或策略文件时：云端运行写 `Code-Tool: <工具> <模型> <档位>`，本地电脑运行写 `Code-Tool: <工具> <模型> <档位>` 并加 `Host-Id: <host-id>`，见「署名」；本地运行时 host id 会出现在公开的提交记录里）
+- 署名 trailer 来源：<ATTRIBUTION_SCRIPT_OR_POLICY>（未配置时，云端和本地运行均使用 `Code-Tool: <工具> <模型> <档位>`，见「署名」）
 - 下一轮登记位置：<BACKLOG_LOCATION>（项目没有指定时：相关 PR 的评论和交接记录）
 - required checks：<CHECK_NAMES>
 - 合并策略及批准依据：<STRATEGY_AND_APPROVAL>
@@ -137,6 +133,7 @@ This is the single shared template. Both languages express the same rules and fi
 观察结果、推导与未知分开记录。模拟测试不代表真实环境验证；标明实际测试条件和样本范围。生成文件应从项目指定源文件再生成，不直接手改生成结果；项目没有此类文件则不适用。
 
 #### 变更记录
+- 未发布：移除默认署名中的 `Host-Id`。项目没有署名脚本或策略文件时，云端和本地运行均添加 `Code-Tool: <工具> <模型> <档位>`。
 - 2026-11-15 — v2.2（来源与评审依据见模板仓库的 `docs/reviews/v2.2-review.md`）
   - 新增：
     - 「每批闭环与分级处理」：MVP 迭代，每轮只修 S1 和挡合并或主流程的 S2，其余 S2、S3 和小问题登记到下一轮；评审者标明每条 S2 是否挡合并或主流程；登记不等于豁免，请求合并批准时一并列出；加强测试和独立评审合成一轮交接，只回报一次，停止点事项和扫描命中仍然出现即报。
@@ -239,7 +236,7 @@ Every merge needs review first; never merge first and review later. Passing CI o
 
 #### Handoff and task briefs
 - A task brief states the base commit, branch name, Draft PR target branch, commit order (spec changes → failing tests first → implementation), hard constraints, acceptance criteria, and the attribution trailer.
-- Copy the attribution trailer verbatim from the repository's attribution script or policy file (see "Attribution trailer source" in the configuration table); do not write it from memory. If the project has no attribution script or policy file, follow the source trailer rule under "Attribution" (only `Code-Tool` when running in the cloud; `Code-Tool` plus `Host-Id` when running on a local computer).
+- Copy the attribution trailer verbatim from the repository's attribution script or policy file (see "Attribution trailer source" in the configuration table); do not write it from memory. If the project has no attribution script or policy file, follow the source trailer rule under "Attribution".
 - Paste only the brief body into the coding tool's input box, with no conversation or commentary; check it with a screenshot before sending.
 - The cloud coding environment the project designates (default under "Default roles") is a full working environment: it may read and write, push to the agreed branches (branch prefix in the configuration table, default `codex/*`), and open a Draft PR. Do not instruct it to be "read-only" or "not to push," unless the user explicitly narrows permissions for that task. To retrieve changes, prefer having it push the agreed branch and open a Draft PR. This covers only the agreed branches and Draft PRs and does not change the stop points: merging, deployment, rewriting pushed history, policy files, and the rest still stop and wait for approval under "Major changes and stop points that require user approval".
 - Before submitting a cloud task, verify that the environment is cloud, not local, that the model and tier are correct, and that the environment's Git hosting connection is authorized for this repository (check the connection state itself and confirm that this repository and the target branch are visible). If the task entry point has no branch picker (for example a web task), state the base branch in the task body. After submission, someone must follow it through to completion and report the result proactively.
@@ -248,11 +245,7 @@ Every merge needs review first; never merge first and review later. Passing CI o
 #### Attribution
 First use read-only checks to verify existing access to the target repository and the capabilities of the current tools. A CLI without a login does not mean the connector lacks access; do not request duplicate authorization on that basis. Preserve and disclose Git author/committer metadata truthfully, without impersonation; use an identifiable AI author name when the tool supports it and project rules allow it. If the tool cannot set an AI author and project rules permit the fallback, retain the connected-account identity actually set by the tool, explicitly state AI authored in the commit message, add `Agent: <actual-source-identifier>`, and disclose AI origin, the actual author/committer and the tool limitation in the PR. Do not claim that the author field is an AI identity. If mandatory AI-author, DCO or signing rules cannot be met through the current path, stop the affected commit/publication and ask for direction; do not bypass requirements, change rules or create credentials on your own. Take the exact trailer keys and format from the project's attribution script or policy file verbatim.
 
-If the project has no attribution script or policy file, add source trailers alongside the other trailers (such as `Agent: <actual-source-identifier>`), depending on where the coding agent runs:
-- In a cloud environment (for example Codex cloud): record only the tool's own identifier, such as `Code-Tool: codex <model> <tier>`; do not add Host-Id.
-- On a local computer: record the same `Code-Tool: codex <model> <tier>` and add `Host-Id: <host-id>`; Host-Id carries only the id agreed for that computer, never its real host name. Write both lines, never Host-Id alone.
-
-Documents, examples, and task-brief templates use only placeholders, never a real host name. Note: when this rule is applied on a local computer, the host id appears in the public commit history.
+If the project has no attribution script or policy file, add `Code-Tool: <tool> <model> <tier>` for both cloud and local runs alongside other trailers such as `Agent: <actual-source-identifier>`.
 
 Human commits use the person’s chosen name, email and `Agent: human`; human approval does not change AI implementation origin. Do not infer AI origin from email domains, require humans to use noreply, change global identity or account privacy settings without authorization, or copy real email addresses into document/PR body text.
 
@@ -288,7 +281,7 @@ Commit messages, PR bodies, and other outward-facing content do not mention expe
 - Independent review mechanism: <REVIEWER_OR_SERVICE> (default Claude, Opus 5.5 High, private Claude Project)
 - Coding tool and tier: <CODING_TOOL_AND_TIER> (default Codex cloud, GPT-6.1 Sol, Extra High; the agreed branch prefix for cloud tasks defaults to `codex/*`)
 - Technical research role: <RESEARCH_ROLE> (if the project has not configured one: the agent responsible for coding checks the official documentation itself and attaches source links)
-- Attribution trailer source: <ATTRIBUTION_SCRIPT_OR_POLICY> (if the project has no attribution script or policy file: `Code-Tool: <tool> <model> <tier>` when running in the cloud, `Code-Tool: <tool> <model> <tier>` plus `Host-Id: <host-id>` when running on a local computer, see "Attribution"; for local runs the host id appears in the public commit history)
+- Attribution trailer source: <ATTRIBUTION_SCRIPT_OR_POLICY> (default for both cloud and local runs: `Code-Tool: <tool> <model> <tier>`; see "Attribution")
 - Next-round log location: <BACKLOG_LOCATION> (if the project has not designated one: comments on the relevant PR and the handoff record)
 - required checks: <CHECK_NAMES>
 - Merge strategy and approval basis: <STRATEGY_AND_APPROVAL>
@@ -298,6 +291,7 @@ Commit messages, PR bodies, and other outward-facing content do not mention expe
 Record observations, deductions, and unknowns separately. Simulated tests do not establish validation in a real environment; state the actual test conditions and sample scope. Regenerate generated files from project-designated source files instead of hand-editing the output. This does not apply if the project has no such files.
 
 #### Change log
+- Unreleased: Removes `Host-Id` from default attribution. If the project has no attribution script or policy file, add `Code-Tool: <tool> <model> <tier>` for both cloud and local runs.
 - 2026-11-15 — v2.2 (sources and review basis: `docs/reviews/v2.2-review.en.md` in the template repository)
   - Added:
     - "Per-batch loop and severity handling": MVP iteration, where each round fixes only S1 issues and S2 issues that block a merge or the main flow, and the remaining S2 issues, S3 issues, and small items are logged for the next round; the reviewer marks whether each S2 issue blocks a merge or the main flow; logging does not waive an item, and logged items are listed when requesting merge approval; strengthened tests and independent review form one handoff with one report, while stop-point items and scan hits are still reported as soon as they occur.

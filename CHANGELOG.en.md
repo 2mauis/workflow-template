@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Removes `Host-Id` from default attribution. If the project has no attribution script or policy file, add `Code-Tool: <tool> <model> <tier>` for both cloud and local runs. The rules, AGENTS template, adoption guide, and both Cookbooks carry the same default in Chinese and English.
+
 ## 2.2.2 — 2026-11-15
 - The workflow version is still v2.2: the rules in `template/docs/workflow-v2.md`, the AGENTS template, and the other shared templates are unchanged, and the version title of the rules file stays the same.
 - Splits the Cookbook into two, under this repository's `docs/` (not `template/`), each in Chinese and English:
