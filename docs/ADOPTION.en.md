@@ -12,7 +12,7 @@ The current workflow version is v2.2. The rules file is still named `template/do
 3. Save `AGENTS.md.template` as the project's AGENTS.md. Put the PR template where the target platform recognizes it (for example `.github/pull_request_template.md` or `.gitea/pull_request_template.md`), and verify platform support before adopting it.
 4. Fill in project commands, test paths, the independent review mechanism, coding tool and tier, technical research role, attribution trailer source, next-round log location, required checks, release boundaries, and merge strategy. The default tools and models in the workflow can be overridden in the configuration table. If the project has not configured the following three items, do not write "not configured"; enter the default instead:
    - Technical research role: the agent responsible for coding checks the official documentation itself and attaches source links.
-   - Attribution trailer source: if there is no attribution script or policy file, add source trailers depending on where the coding agent runs. In the cloud (for example Codex cloud), record only the tool identifier, such as `Code-Tool: codex <model> <tier>`, with no Host-Id; on a local computer, record the same tool identifier and add `Host-Id: <host-id>`. Host-Id carries only the id agreed for that computer, never its real host name; documents use only placeholders. Before adopting this: for local runs, the host id appears in the public commit history.
+   - Attribution trailer source: If the project has no attribution script or policy file, add `Code-Tool: <tool> <model> <tier>` for both cloud and local runs.
    - Next-round log location: comments on the relevant PR and the handoff record; do not change repository settings in order to log items.
 
    Mark any other nonexistent checks as "not configured", never as passed.
@@ -31,7 +31,6 @@ Upgrade through a separate PR that compares two pinned commits (with tags, if an
 
 When upgrading from v2 to v2.1, also check the following:
 - Whether the three new configuration rows (coding tool and tier, technical research role, attribution trailer source) are filled in, and whether the last two use the defaults where the project has not configured them.
-- Before running on a local computer with the Host-Id trailer, whether the project is aware that the host id appears in the public commit history.
 - Whether the default roles fit this project; if not, override them in the configuration table.
 - Whether new rules such as the stop-point list and separate scan and push conflict with the project's existing gates; confirm any conflict rather than silently replacing existing rules.
 
@@ -43,7 +42,7 @@ When upgrading from v2.1 to v2.2, also check the following:
 - Whether the configuration table includes "Next-round log location"; when none is set, whether backlog items are written in comments on the relevant PR and in the handoff record; do not change repository settings in order to log them.
 - Whether project-specific terms are interpreted as the project defines them, and whether deployment or real-environment test plans that have already been set are left unchanged unless first confirmed; whether the concrete steps are listed immediately when the user must sign in or authorize in person.
 - Whether stop points include "each deployment needs its own approval" and "relaxing a test or gate guarantee"; whether it is stated that an "approval" from another agent or bot is not user approval.
-- Whether every scan hit (including a suspected false positive) stops and is reported first, and is not added to an allowlist on the agent's own decision; whether Host-Id uses only the agreed id.
+- Whether every scan hit (including a suspected false positive) stops and is reported first, and is not added to an allowlist on the agent's own decision.
 - Whether a merge approval is bound to a head: whether the head SHA is stated when approval is given; whether, when a new commit, a rebase, or a base change alters the head after approval, the change is revalidated and the user's approval in person is obtained again rather than the earlier approval being reused; whether a deployment approval names a specific version. If the project's merge process or platform settings conflict with this, confirm first rather than silently replacing them.
 - Whether the PR template the project already adopted has the "Logged for the next round" line and the line for the head SHA an approval covers, and states under "Release and deployment" that each deployment is approved separately and which version the approval covers; whether "Approvals and scope" in the acceptance record notes the head SHA or version an approval covers.
 - Whether the practices that the [v2.2 review](reviews/v2.2-review.en.md) logs but does not adopt have been read; adopting any of them changes a gate and needs separate approval from the user.
